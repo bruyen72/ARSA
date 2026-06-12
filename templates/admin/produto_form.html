@@ -1,0 +1,182 @@
+<?php
+$active = 'dashboard';
+$isEdit = $product['id'] !== null;
+$actionUrl = $isEdit ? url_for('/admin/produtos/editar/' . $product['id']) : url_for('/admin/produtos/adicionar');
+$topbar_actions = '<a class="btn btn-ghost btn-sm" href="' . url_for('/admin') . '">← Voltar ao painel</a>';
+include __DIR__ . '/partials/header.html';
+?>
+
+<div class="admin-card">
+  <form class="form-grid" method="post" action="<?= $actionUrl ?>" enctype="multipart/form-data">
+    <?= csrf_field() ?>
+
+    <div class="form-row-2">
+      <div class="field">
+        <label for="in-name">Nome do produto *</label>
+        <input id="in-name" name="name" type="text" value="<?= h($product['name']) ?>" required>
+      </div>
+      <div class="field">
+        <label for="in-category">Categoria *</label>
+        <select id="in-category" name="category" required>
+          <?php foreach ($categories as $key => $label): ?>
+          <option value="<?= h($key) ?>"<?= $product['category'] === $key ? ' selected' : '' ?>><?= h($label) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="in-brand">Marca</label>
+      <input id="in-brand" name="brand" type="text" value="<?= h($product['brand'] ?? '') ?>" placeholder="Ex.: Caltta, Motorola, Hytera...">
+    </div>
+
+    <div class="field">
+      <label for="in-description">Descrição / resumo</label>
+      <textarea id="in-description" name="description" rows="3"><?= h($product['description'] ?? '') ?></textarea>
+    </div>
+
+    <div class="field">
+      <label for="in-highlights">Destaques (um por linha)</label>
+      <textarea id="in-highlights" name="highlights" rows="4" class="mono"><?= h(array_to_lines($product['highlights'])) ?></textarea>
+      <span class="hint">Cada linha vira um item de destaque na página do produto.</span>
+    </div>
+
+    <div class="field">
+      <label>Especificações técnicas</label>
+      <span class="hint">Preencha o nome da característica e o valor dela. Clique em "+ Adicionar especificação" para criar mais linhas.</span>
+      <div class="specs-rows" id="specs-rows">
+        <?php if (empty($product['specs'])): ?>
+        <div class="specs-row">
+          <input type="text" class="specs-key" placeholder="Ex.: Alcance">
+          <input type="text" class="specs-value" placeholder="Ex.: até 10 km">
+          <button type="button" class="btn btn-danger btn-sm specs-remove" aria-label="Remover esta especificação">Remover</button>
+        </div>
+        <?php else: ?>
+        <?php foreach ($product['specs'] as $especKey => $especValor): ?>
+        <div class="specs-row">
+          <input type="text" class="specs-key" placeholder="Ex.: Alcance" value="<?= h($especKey) ?>">
+          <input type="text" class="specs-value" placeholder="Ex.: até 10 km" value="<?= h($especValor) ?>">
+          <button type="button" class="btn btn-danger btn-sm specs-remove" aria-label="Remover esta especificação">Remover</button>
+        </div>
+        <?php endforeach; ?>
+        <?php endif; ?>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm" id="specs-add">+ Adicionar especificação</button>
+      <textarea id="in-specs" name="specs" class="mono" hidden><?= h(specs_to_text($product['specs'])) ?></textarea>
+    </div>
+
+    <fieldset class="admin-fieldset">
+      <legend>Imagem principal</legend>
+      <?php $foto = media_url($product['image_path'] ?? null); ?>
+      <?php if ($foto): ?>
+      <div class="upload-current">
+        <img src="<?= h($foto) ?>" alt="">
+        <?php if ($isEdit): ?>
+        <button class="btn btn-danger btn-sm" type="submit" formaction="<?= url_for('/admin/produtos/excluir-imagem/' . $product['id']) ?>" onclick="return confirm('Remover a imagem principal?');">Remover imagem</button>
+        <?php endif; ?>
+      </div>
+      <?php endif; ?>
+      <div class="field">
+        <label for="in-imagem">Enviar <?= $foto ? 'nova' : '' ?> imagem (jpg, png ou webp)</label>
+        <input id="in-imagem" name="imagem" type="file" accept=".jpg,.jpeg,.png,.webp">
+      </div>
+    </fieldset>
+
+    <fieldset class="admin-fieldset">
+      <legend>Galeria de imagens</legend>
+      <?php if (!empty($product['image_paths'])): ?>
+      <div class="gallery-grid">
+        <?php foreach ($product['image_paths'] as $i => $img): $imgUrl = media_url($img); ?>
+        <div class="gallery-item">
+          <img src="<?= h($imgUrl) ?>" alt="">
+          <?php if ($isEdit): ?>
+          <button class="btn btn-danger btn-sm" type="submit" style="width:100%;" formaction="<?= url_for('/admin/produtos/excluir-imagem-adicional/' . $product['id'] . '/' . $i) ?>" onclick="return confirm('Remover esta imagem da galeria?');">Remover</button>
+          <?php endif; ?>
+        </div>
+        <?php endforeach; ?>
+      </div>
+      <?php endif; ?>
+      <div class="field">
+        <label for="in-galeria">Adicionar imagens à galeria (pode selecionar várias)</label>
+        <input id="in-galeria" name="galeria[]" type="file" accept=".jpg,.jpeg,.png,.webp" multiple>
+      </div>
+    </fieldset>
+
+    <fieldset class="admin-fieldset">
+      <legend>Ficha técnica (PDF)</legend>
+      <?php if (!empty($product['pdf_path'])): $pdfUrl = upload_url($product['pdf_path']); ?>
+      <div class="upload-current">
+        <span class="file-pill">PDF</span>
+        <div class="upload-actions">
+          <a class="btn btn-ghost btn-sm" href="<?= h($pdfUrl) ?>" target="_blank" rel="noopener">Ver PDF atual</a>
+          <?php if ($isEdit): ?>
+          <button class="btn btn-danger btn-sm" type="submit" formaction="<?= url_for('/admin/produtos/excluir-pdf/' . $product['id']) ?>" onclick="return confirm('Remover o PDF da ficha técnica?');">Remover PDF</button>
+          <?php endif; ?>
+        </div>
+      </div>
+      <?php endif; ?>
+      <div class="field">
+        <label for="in-pdf">Enviar <?= !empty($product['pdf_path']) ? 'novo' : '' ?> PDF</label>
+        <input id="in-pdf" name="pdf" type="file" accept=".pdf">
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit"><?= $isEdit ? 'Salvar alterações' : 'Cadastrar produto' ?></button>
+      <a class="btn btn-ghost" href="<?= url_for('/admin') ?>">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  (function () {
+    var container = document.getElementById('specs-rows');
+    var addBtn = document.getElementById('specs-add');
+    var hidden = document.getElementById('in-specs');
+    var form = hidden.closest('form');
+
+    function novaLinha(chave, valor) {
+      var row = document.createElement('div');
+      row.className = 'specs-row';
+      row.innerHTML =
+        '<input type="text" class="specs-key" placeholder="Ex.: Alcance">' +
+        '<input type="text" class="specs-value" placeholder="Ex.: até 10 km">' +
+        '<button type="button" class="btn btn-danger btn-sm specs-remove" aria-label="Remover esta especificação">Remover</button>';
+      row.querySelector('.specs-key').value = chave || '';
+      row.querySelector('.specs-value').value = valor || '';
+      return row;
+    }
+
+    addBtn.addEventListener('click', function () {
+      var row = novaLinha('', '');
+      container.appendChild(row);
+      row.querySelector('.specs-key').focus();
+    });
+
+    container.addEventListener('click', function (e) {
+      if (e.target.classList.contains('specs-remove')) {
+        var linhas = container.querySelectorAll('.specs-row');
+        if (linhas.length > 1) {
+          e.target.closest('.specs-row').remove();
+        } else {
+          // mantém ao menos uma linha, só limpa os campos
+          e.target.closest('.specs-row').querySelectorAll('input').forEach(function (i) { i.value = ''; });
+        }
+      }
+    });
+
+    form.addEventListener('submit', function () {
+      var linhas = [];
+      container.querySelectorAll('.specs-row').forEach(function (row) {
+        var chave = row.querySelector('.specs-key').value.trim();
+        var valor = row.querySelector('.specs-value').value.trim();
+        if (chave !== '') {
+          linhas.push(chave + ': ' + valor);
+        }
+      });
+      hidden.value = linhas.join('\n');
+    });
+  })();
+</script>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

@@ -1,0 +1,55 @@
+<footer class="site-footer" data-screen-label="Rodapé">
+  <div class="wrap footer-grid">
+    <div class="footer-logo">
+      <img src="<?= url_for('/static/img/logo-white.png') ?>" alt="ARSA">
+    </div>
+    <div>
+      <h4>Navegação</h4>
+      <ul>
+        <li><a href="<?= url_for('/') ?>">Início</a></li>
+        <li><a href="<?= url_for('/produtos') ?>">Produtos</a></li>
+        <li><a href="<?= url_for('/servicos') ?>">Serviços</a></li>
+        <li><a href="<?= url_for('/quem-somos') ?>">Quem Somos</a></li>
+        <li><a href="<?= url_for('/contato') ?>">Contato</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Marcas</h4>
+      <ul>
+        <li>Caltta</li>
+        <li>Motorola</li>
+        <li>Intelbras</li>
+        <li>Hytera</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contato</h4>
+      <ul class="footer-contact">
+        <li><a href="tel:+<?= h(get_content('contact_whatsapp', '556584451909')) ?>"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.24 1.01z"/></svg><?= h(get_content('contact_phone_display', '(65) 8445-1909')) ?></a></li>
+        <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><?= h(get_content('contact_address_line1', 'R. São Joaquim, 726 — Centro Sul')) ?></li>
+        <li><?= h(get_content('contact_address_line2', 'Cuiabá - MT, 78020-150')) ?></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span><?= h(get_content('footer_copyright', '© 2026 ARSA Radiocomunicação. Todos os direitos reservados.')) ?></span>
+    <span><?= h(get_content('footer_location', 'Cuiabá — Mato Grosso')) ?></span>
+  </div>
+</footer>
+
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script>
+  window.ARSA_TWEAK_DEFAULTS = {
+    "theme": "<?= h($theme ?? 'claro') ?>",
+    "accentHex": "<?= h($tweak_accent ?? '#1b8fd9') ?>",
+    "anim": true,
+    "radius": <?= (int) ($tweak_radius ?? 14) ?>
+  };
+</script>
+<script type="text/babel" src="<?= url_for('/static/js/tweaks-panel.jsx') ?>"></script>
+<script type="text/babel" src="<?= url_for('/static/js/arsa-tweaks.jsx') ?>"></script>
+</body>
+</html>

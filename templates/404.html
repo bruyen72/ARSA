@@ -1,0 +1,23 @@
+<?php
+$theme = 'claro';
+$tweak_accent = '#1b8fd9';
+$tweak_radius = 14;
+include __DIR__ . '/partials/header.html';
+?>
+
+<main>
+  <section class="section" data-screen-label="404">
+    <div class="wrap">
+      <div class="section-head center rv" style="padding: 60px 0;">
+        <div class="kicker">Erro 404</div>
+        <h2><?= h($title ?? 'Página não encontrada') ?></h2>
+        <p>A página que você procura não existe ou foi movida.</p>
+        <p style="margin-top: 24px;">
+          <a class="btn btn-whatsapp" href="<?= url_for('/') ?>">Voltar para o início</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title><?= h($title) ?> — Painel ARSA</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<?= url_for('/static/css/arsa.css') ?>">
+<link rel="stylesheet" href="<?= url_for('/static/css/admin.css') ?>">
+<link rel="icon" href="<?= url_for('/static/img/logo.png') ?>">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <img src="<?= url_for('/static/img/logo.png') ?>" alt="ARSA">
+      <span>Painel ARSA</span>
+    </div>
+    <nav class="admin-nav">
+      <a href="<?= url_for('/admin') ?>"<?= ($active ?? '') === 'dashboard' ? ' class="active"' : '' ?>>Dashboard</a>
+      <a href="<?= url_for('/admin/conteudo') ?>"<?= ($active ?? '') === 'conteudo' ? ' class="active"' : '' ?>>Conteúdo do site</a>
+      <?php $admMensagensNaoLidas = (int) db()->query('SELECT COUNT(*) FROM messages WHERE lida = 0')->fetchColumn(); ?>
+      <a href="<?= url_for('/admin/mensagens') ?>"<?= ($active ?? '') === 'mensagens' ? ' class="active"' : '' ?>>
+        Mensagens
+        <?php if ($admMensagensNaoLidas > 0): ?><span class="badge-count"><?= $admMensagensNaoLidas ?></span><?php endif; ?>
+      </a>
+      <a href="<?= url_for('/admin/senha') ?>"<?= ($active ?? '') === 'senha' ? ' class="active"' : '' ?>>Alterar senha</a>
+    </nav>
+    <div class="admin-nav-foot">
+      <a class="site-link" href="<?= url_for('/') ?>" target="_blank" rel="noopener">↗ Ver site</a>
+      <a href="<?= url_for('/admin/logout') ?>">Sair</a>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <h1><?= h($title) ?></h1>
+      <?php if (!empty($topbar_actions)): ?>
+      <div class="topbar-actions"><?= $topbar_actions ?></div>
+      <?php endif; ?>
+    </header>
+
+    <?php foreach (get_flashed_messages() as $flash): ?>
+    <div class="admin-flash flash-<?= h($flash['category']) ?>"><?= h($flash['message']) ?></div>
+    <?php endforeach; ?>
+
+    <div class="admin-content">

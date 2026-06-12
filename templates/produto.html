@@ -1,0 +1,410 @@
+<?php
+$theme = 'claro';
+$tweak_accent = '#1b8fd9';
+$tweak_radius = 14;
+$foto = media_url($product['image_path'] ?? null);
+
+// Monta a lista de todas as fotos (principal + galeria) para o zoom/lightbox
+$allImages = [];
+if (!empty($product['image_paths'])) {
+    foreach ($product['image_paths'] as $imgPath) {
+        $imgUrl = media_url($imgPath);
+        if ($imgUrl) {
+            $allImages[] = $imgUrl;
+        }
+    }
+}
+if ($foto) {
+    $allImages = array_values(array_unique(array_merge([$foto], $allImages)));
+} elseif (!empty($allImages)) {
+    $foto = $allImages[0];
+}
+
+$extra_head = <<<HTML
+<style>
+  .detail-photo { position: relative; }
+  .foto-zoom-area { overflow: hidden; border-radius: 12px; }
+  #foto-principal { cursor: zoom-in; transition: transform .15s ease-out; }
+  @media (hover: hover) and (pointer: fine) {
+    #foto-principal:hover { cursor: zoom-in; }
+  }
+  .gallery-thumb { cursor: pointer; transition: border-color .15s, transform .15s; }
+  .gallery-thumb:hover { transform: translateY(-2px); }
+  .gallery-thumb.active { border-color: var(--accent-deep) !important; }
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 16, 24, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 24px;
+  }
+  .lightbox-overlay.open { display: flex; }
+  .lightbox-stage {
+    position: relative;
+    width: min(92vw, 1100px);
+    height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    cursor: zoom-in;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
+  }
+  .lightbox-img.zoomed { cursor: grab; }
+  .lightbox-img.zoomed.dragging { cursor: grabbing; }
+  .lightbox-hint {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.14);
+    padding: 6px 14px;
+    border-radius: 999px;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: opacity .15s;
+  }
+  .lightbox-overlay.is-zoomed .lightbox-hint { opacity: 0; }
+  .lightbox-close, .lightbox-nav {
+    position: absolute;
+    border: none;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s;
+  }
+  .lightbox-close:hover, .lightbox-nav:hover { background: rgba(255,255,255,0.28); }
+  .lightbox-close { top: 20px; right: 20px; width: 44px; height: 44px; font-size: 26px; line-height: 1; }
+  .lightbox-nav { top: 50%; transform: translateY(-50%); width: 52px; height: 52px; font-size: 22px; }
+  .lightbox-prev { left: 20px; }
+  .lightbox-next { right: 20px; }
+  .lightbox-counter {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.12);
+    padding: 6px 16px;
+    border-radius: 999px;
+  }
+  @media (max-width: 680px) {
+    .lightbox-nav { width: 42px; height: 42px; font-size: 18px; }
+    .lightbox-prev { left: 8px; }
+    .lightbox-next { right: 8px; }
+    .lightbox-close { top: 10px; right: 10px; }
+    .lightbox-hint { font-size: 11px; padding: 5px 12px; top: 8px; }
+  }
+</style>
+HTML;
+
+include __DIR__ . '/partials/header.html';
+?>
+
+<main>
+  <section class="detail-section" data-screen-label="Detalhe do produto">
+    <div class="wrap">
+      <div class="bc rv">
+        <a href="<?= url_for('/') ?>">Início</a>
+        <span class="sep">/</span>
+        <a href="<?= url_for('/produtos') ?>">Produtos</a>
+        <span class="sep">/</span>
+        <span id="bc-nome"><?= h($product['name']) ?></span>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-photo rv" id="foto-wrap">
+          <?php if ($foto): ?>
+            <div class="foto-zoom-area" id="foto-zoom-area">
+              <img id="foto-principal" data-index="0" src="<?= h($foto) ?>" alt="<?= h($product['name']) ?>" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+            </div>
+          <?php else: ?>
+            <image-slot shape="rounded" radius="12" fit="contain" placeholder="Foto: <?= h($product['name']) ?>"></image-slot>
+          <?php endif; ?>
+
+          <?php if (count($allImages) > 1): ?>
+          <div class="detail-gallery" style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+            <?php foreach ($allImages as $i => $imgUrl): ?>
+              <img src="<?= h($imgUrl) ?>" alt="<?= h($product['name']) ?>" class="gallery-thumb<?= $i === 0 ? ' active' : '' ?>" data-index="<?= $i ?>" style="width:84px; height:84px; object-fit:cover; border-radius:10px; border:2px solid <?= $i === 0 ? 'var(--accent-deep)' : 'var(--line)' ?>;">
+            <?php endforeach; ?>
+          </div>
+          <?php endif; ?>
+        </div>
+
+        <div class="detail-info rv" style="--rv-delay: 0.1s;">
+          <span class="cat-tag"><?= h(category_label($product['category'])) ?></span>
+          <h1><?= h($product['name']) ?></h1>
+          <p class="marca-line">Marca: <strong><?= h($product['brand'] ?? '—') ?></strong></p>
+          <p class="resumo"><?= h($product['description'] ?? '') ?></p>
+
+          <div class="detail-ctas">
+            <a class="btn btn-whatsapp" href="<?= h(whatsapp_link('Olá! Queria uma cotação do ' . $product['name'] . '.')) ?>" target="_blank" rel="noopener">
+              <svg class="wa-icon" viewBox="0 0 448 512" aria-hidden="true"><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32 101.5 32 2 131.5 2 253.9c0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.5 224.1-221.9 0-59.3-25.2-115-67.1-157.1zM223.9 438.7c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.3 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.7-186.6 184.7zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+              Pedir cotação
+            </a>
+            <a class="btn btn-ghost" href="<?= h(whatsapp_link('Olá! Queria saber os valores de locação do ' . $product['name'] . '.')) ?>" target="_blank" rel="noopener">Quero alugar</a>
+          </div>
+
+          <?php if (!empty($product['highlights'])): ?>
+          <ul class="destaques">
+            <?php foreach ($product['highlights'] as $destaque): ?>
+              <li><?= h($destaque) ?></li>
+            <?php endforeach; ?>
+          </ul>
+          <?php endif; ?>
+
+          <?php if (!empty($product['specs'])): ?>
+          <div class="specs-card">
+            <div class="specs-title">Ficha técnica</div>
+            <table class="specs-table">
+              <?php foreach ($product['specs'] as $chave => $valor): ?>
+                <tr>
+                  <th><?= h($chave) ?></th>
+                  <td><?= h($valor) ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </table>
+            <p class="aviso-specs">Os dados podem variar conforme a versão do equipamento. Confirme com a nossa equipe antes de fechar o pedido.</p>
+          </div>
+          <?php endif; ?>
+
+          <?php if (!empty($product['pdf_path'])): ?>
+          <p style="margin-top: 18px;">
+            <a class="card-link" href="<?= h(upload_url($product['pdf_path'])) ?>" target="_blank" rel="noopener">Baixar ficha técnica em PDF</a>
+          </p>
+          <?php endif; ?>
+        </div>
+      </div>
+
+      <?php if (!empty($allImages)): ?>
+      <div class="lightbox-overlay" id="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Imagem ampliada de <?= h($product['name']) ?>">
+        <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Fechar">&times;</button>
+        <?php if (count($allImages) > 1): ?>
+        <button type="button" class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Imagem anterior">&#10094;</button>
+        <button type="button" class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Próxima imagem">&#10095;</button>
+        <?php endif; ?>
+        <div class="lightbox-stage" id="lightbox-stage">
+          <img class="lightbox-img" id="lightbox-img" src="" alt="<?= h($product['name']) ?>" draggable="false">
+          <span class="lightbox-hint">🔍 Clique para ampliar e arraste para mover</span>
+        </div>
+        <?php if (count($allImages) > 1): ?>
+        <div class="lightbox-counter" id="lightbox-counter"></div>
+        <?php endif; ?>
+      </div>
+
+      <script>
+      (function () {
+        var images = <?= json_encode($allImages) ?>;
+        var overlay = document.getElementById('lightbox-overlay');
+        var imgEl = document.getElementById('lightbox-img');
+        var counterEl = document.getElementById('lightbox-counter');
+        var closeBtn = document.getElementById('lightbox-close');
+        var prevBtn = document.getElementById('lightbox-prev');
+        var nextBtn = document.getElementById('lightbox-next');
+        var mainImg = document.getElementById('foto-principal');
+        var zoomArea = document.getElementById('foto-zoom-area');
+        var thumbs = document.querySelectorAll('.gallery-thumb');
+        var current = 0;
+
+        // Estado do zoom/arraste dentro do lightbox (galeria em tela cheia)
+        var stage = document.getElementById('lightbox-stage');
+        var LIGHTBOX_ZOOM = 2.5;
+        var zoomState = { scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, moved: false };
+
+        function setMainImage(index) {
+          if (!mainImg || !images[index]) return;
+          mainImg.src = images[index];
+          mainImg.dataset.index = index;
+          thumbs.forEach(function (t) {
+            t.classList.toggle('active', parseInt(t.dataset.index, 10) === index);
+          });
+        }
+
+        function applyZoomTransform() {
+          imgEl.style.transform = 'translate(' + zoomState.x + 'px, ' + zoomState.y + 'px) scale(' + zoomState.scale + ')';
+        }
+
+        function resetZoom() {
+          zoomState.scale = 1;
+          zoomState.x = 0;
+          zoomState.y = 0;
+          imgEl.classList.remove('zoomed', 'dragging');
+          imgEl.style.transform = '';
+          overlay.classList.remove('is-zoomed');
+        }
+
+        function clampPan(scale, x, y) {
+          var stageRect = stage.getBoundingClientRect();
+          var baseW = imgEl.clientWidth;
+          var baseH = imgEl.clientHeight;
+          var scaledW = baseW * scale;
+          var scaledH = baseH * scale;
+          var maxX = Math.max(0, (scaledW - stageRect.width) / 2);
+          var maxY = Math.max(0, (scaledH - stageRect.height) / 2);
+          return {
+            x: Math.max(-maxX, Math.min(maxX, x)),
+            y: Math.max(-maxY, Math.min(maxY, y))
+          };
+        }
+
+        function updateLightbox() {
+          resetZoom();
+          imgEl.src = images[current];
+          if (counterEl) counterEl.textContent = (current + 1) + ' / ' + images.length;
+        }
+
+        function openLightbox(index) {
+          current = index;
+          updateLightbox();
+          overlay.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+          overlay.classList.remove('open');
+          document.body.style.overflow = '';
+          resetZoom();
+        }
+
+        function showPrev() {
+          current = (current - 1 + images.length) % images.length;
+          updateLightbox();
+        }
+
+        function showNext() {
+          current = (current + 1) % images.length;
+          updateLightbox();
+        }
+
+        if (mainImg) {
+          mainImg.addEventListener('click', function () {
+            openLightbox(parseInt(mainImg.dataset.index, 10) || 0);
+          });
+        }
+
+        thumbs.forEach(function (thumb) {
+          thumb.addEventListener('click', function () {
+            setMainImage(parseInt(thumb.dataset.index, 10));
+          });
+        });
+
+        // Zoom e arraste dentro do lightbox: clique amplia/reduz, arraste move a imagem
+        if (imgEl && stage) {
+          imgEl.addEventListener('click', function () {
+            if (zoomState.moved) { zoomState.moved = false; return; }
+            if (zoomState.scale === 1) {
+              zoomState.scale = LIGHTBOX_ZOOM;
+              imgEl.classList.add('zoomed');
+              overlay.classList.add('is-zoomed');
+              applyZoomTransform();
+            } else {
+              resetZoom();
+            }
+          });
+
+          imgEl.addEventListener('pointerdown', function (e) {
+            if (zoomState.scale === 1) return;
+            e.preventDefault();
+            zoomState.dragging = true;
+            zoomState.moved = false;
+            zoomState.startX = e.clientX - zoomState.x;
+            zoomState.startY = e.clientY - zoomState.y;
+            imgEl.classList.add('dragging');
+          });
+
+          window.addEventListener('pointermove', function (e) {
+            if (!zoomState.dragging) return;
+            e.preventDefault();
+            var nx = e.clientX - zoomState.startX;
+            var ny = e.clientY - zoomState.startY;
+            if (Math.abs(nx - zoomState.x) > 2 || Math.abs(ny - zoomState.y) > 2) zoomState.moved = true;
+            var clamped = clampPan(zoomState.scale, nx, ny);
+            zoomState.x = clamped.x;
+            zoomState.y = clamped.y;
+            applyZoomTransform();
+          }, { passive: false });
+
+          window.addEventListener('pointerup', function () {
+            zoomState.dragging = false;
+            imgEl.classList.remove('dragging');
+          });
+
+          window.addEventListener('pointercancel', function () {
+            zoomState.dragging = false;
+            imgEl.classList.remove('dragging');
+          });
+        }
+
+        if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+        if (prevBtn) prevBtn.addEventListener('click', showPrev);
+        if (nextBtn) nextBtn.addEventListener('click', showNext);
+
+        overlay.addEventListener('click', function (e) {
+          if (e.target === overlay) closeLightbox();
+        });
+
+        document.addEventListener('keydown', function (e) {
+          if (!overlay.classList.contains('open')) return;
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft') showPrev();
+          if (e.key === 'ArrowRight') showNext();
+        });
+      })();
+      </script>
+      <?php endif; ?>
+    </div>
+  </section>
+
+  <?php if (!empty($related)): ?>
+  <section class="section" style="padding-top: 0;" data-screen-label="Relacionados">
+    <div class="wrap">
+      <h2 class="section-title-sm rv">Você também pode se interessar</h2>
+      <div class="catalog-grid" id="relacionados">
+        <?php foreach ($related as $rel):
+          $relFoto = media_url($rel['image_path'] ?? null);
+        ?>
+        <article class="catalog-card rv in">
+          <div class="photo">
+            <?php if ($relFoto): ?>
+              <img src="<?= h($relFoto) ?>" alt="<?= h($rel['name']) ?>" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;">
+            <?php else: ?>
+              <image-slot id="foto-rel-<?= (int) $rel['id'] ?>" shape="rounded" radius="10" fit="contain" placeholder="Foto: <?= h($rel['name']) ?>"></image-slot>
+            <?php endif; ?>
+          </div>
+          <div class="body">
+            <span class="cat-tag"><?= h(category_label($rel['category'])) ?></span>
+            <h3><?= h($rel['name']) ?></h3>
+            <p class="marca"><?= h($rel['brand'] ?? '') ?></p>
+            <a class="ver" href="<?= url_for('/produto/' . $rel['id']) ?>">Ver produto</a>
+          </div>
+        </article>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+  <?php endif; ?>
+</main>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

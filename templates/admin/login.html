@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title><?= h($title) ?> — Painel ARSA</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<?= url_for('/static/css/arsa.css') ?>">
+<link rel="stylesheet" href="<?= url_for('/static/css/admin.css') ?>">
+<link rel="icon" href="<?= url_for('/static/img/logo.png') ?>">
+</head>
+<body class="admin-body">
+<div class="admin-auth-shell">
+  <div class="admin-auth-card">
+    <div class="admin-logo-solo">
+      <img src="<?= url_for('/static/img/logo.png') ?>" alt="ARSA">
+      <span>Painel administrativo</span>
+    </div>
+    <h1>Entrar</h1>
+
+    <?php foreach (get_flashed_messages() as $flash): ?>
+    <div class="admin-flash flash-<?= h($flash['category']) ?>" style="margin: 0 0 16px;"><?= h($flash['message']) ?></div>
+    <?php endforeach; ?>
+
+    <form class="form-grid" method="post" action="<?= url_for('/admin/login') ?>">
+      <?= csrf_field() ?>
+      <div class="field">
+        <label for="in-username">Usuário</label>
+        <input id="in-username" name="username" type="text" autocomplete="username" required autofocus>
+      </div>
+      <div class="field">
+        <label for="in-password">Senha</label>
+        <input id="in-password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: 4px;">Entrar</button>
+    </form>
+
+    <a class="admin-back-link" href="<?= url_for('/') ?>">← Voltar para o site</a>
+  </div>
+</div>
+</body>
+</html>

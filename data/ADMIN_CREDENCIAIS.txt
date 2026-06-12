@@ -1,0 +1,9 @@
+Credenciais do painel admin
+=======================================================
+
+URL: /admin/login
+Usuário: admin
+Senha:   admin123
+
+IMPORTANTE:
+- Recomendado trocar essa senha em /admin/senha.

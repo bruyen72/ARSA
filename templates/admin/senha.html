@@ -1,0 +1,31 @@
+<?php
+$active = 'senha';
+include __DIR__ . '/partials/header.html';
+?>
+
+<div class="admin-card" style="max-width: 460px;">
+  <h2>Alterar senha</h2>
+  <p class="card-desc">Use uma senha forte, com pelo menos 8 caracteres.</p>
+
+  <form class="form-grid" method="post" action="<?= url_for('/admin/senha') ?>">
+    <?= csrf_field() ?>
+    <div class="field">
+      <label for="in-senha-atual">Senha atual</label>
+      <input id="in-senha-atual" name="senha_atual" type="password" autocomplete="current-password" required>
+    </div>
+    <div class="field">
+      <label for="in-nova-senha">Nova senha</label>
+      <input id="in-nova-senha" name="nova_senha" type="password" autocomplete="new-password" minlength="8" required>
+      <span class="hint">Mínimo de 8 caracteres.</span>
+    </div>
+    <div class="field">
+      <label for="in-confirma-senha">Confirmar nova senha</label>
+      <input id="in-confirma-senha" name="confirma_senha" type="password" autocomplete="new-password" minlength="8" required>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Salvar nova senha</button>
+    </div>
+  </form>
+</div>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

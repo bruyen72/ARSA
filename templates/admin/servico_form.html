@@ -1,0 +1,57 @@
+<?php
+$active = 'dashboard';
+$isEdit = $service['id'] !== null;
+$actionUrl = $isEdit ? url_for('/admin/servicos/editar/' . $service['id']) : url_for('/admin/servicos/adicionar');
+$topbar_actions = '<a class="btn btn-ghost btn-sm" href="' . url_for('/admin') . '">← Voltar ao painel</a>';
+include __DIR__ . '/partials/header.html';
+?>
+
+<div class="admin-card">
+  <form class="form-grid" method="post" action="<?= $actionUrl ?>" enctype="multipart/form-data">
+    <?= csrf_field() ?>
+
+    <div class="form-row-2">
+      <div class="field">
+        <label for="in-name">Nome do serviço *</label>
+        <input id="in-name" name="name" type="text" value="<?= h($service['name']) ?>" required>
+      </div>
+      <div class="field">
+        <label for="in-category">Categoria / etiqueta</label>
+        <input id="in-category" name="category" type="text" value="<?= h($service['category'] ?? '') ?>" placeholder="Ex.: Locação, Manutenção, Consultoria...">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="in-description">Descrição</label>
+      <textarea id="in-description" name="description" rows="4"><?= h($service['description'] ?? '') ?></textarea>
+    </div>
+
+    <div class="field">
+      <label for="in-features">Itens / características (um por linha)</label>
+      <textarea id="in-features" name="features" rows="4" class="mono"><?= h(array_to_lines($service['features'])) ?></textarea>
+      <span class="hint">Cada linha vira um item da lista deste serviço.</span>
+    </div>
+
+    <fieldset class="admin-fieldset">
+      <legend>Foto do serviço</legend>
+      <?php $foto = media_url($service['image_path'] ?? null); ?>
+      <?php if ($foto): ?>
+      <div class="upload-current">
+        <img src="<?= h($foto) ?>" alt="">
+      </div>
+      <p class="card-desc">Envie uma nova imagem abaixo para substituir a foto atual.</p>
+      <?php endif; ?>
+      <div class="field">
+        <label for="in-imagem">Enviar <?= $foto ? 'nova' : '' ?> imagem (jpg, png ou webp)</label>
+        <input id="in-imagem" name="imagem" type="file" accept=".jpg,.jpeg,.png,.webp">
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit"><?= $isEdit ? 'Salvar alterações' : 'Cadastrar serviço' ?></button>
+      <a class="btn btn-ghost" href="<?= url_for('/admin') ?>">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

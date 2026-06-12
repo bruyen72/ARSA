@@ -1,0 +1,71 @@
+<?php
+$active = 'conteudo';
+include __DIR__ . '/partials/header.html';
+?>
+
+<div class="content-tabs">
+  <?php foreach ($secoes as $slug => $secInfo): ?>
+  <a class="content-tab<?= $slug === $secao_atual ? ' active' : '' ?>" href="<?= url_for('/admin/conteudo/' . $slug) ?>"><?= h($secInfo['label']) ?></a>
+  <?php endforeach; ?>
+</div>
+
+<?php $info = $secoes[$secao_atual]; ?>
+
+<form class="form-grid" method="post" action="<?= url_for('/admin/conteudo/' . $secao_atual) ?>" enctype="multipart/form-data">
+  <?= csrf_field() ?>
+
+  <div class="admin-card">
+    <h2><?= h($info['label']) ?></h2>
+    <?php if (!empty($info['descricao'])): ?>
+    <p class="card-desc"><?= h($info['descricao']) ?></p>
+    <?php endif; ?>
+
+    <?php if (!empty($info['imagem'])):
+      $chaveImg = $info['imagem'];
+      $fotoAtual = $valores[$chaveImg] ?? '';
+      $fotoUrl = $fotoAtual ? media_url($fotoAtual) : null;
+    ?>
+    <div class="field" style="margin-bottom: 18px;">
+      <label><?= h($info['imagem_label'] ?? 'Foto') ?></label>
+      <?php if ($fotoUrl): ?>
+      <div class="upload-current">
+        <img src="<?= h($fotoUrl) ?>" alt="">
+        <div class="upload-actions">
+          <label class="hint" style="display: flex; align-items: center; gap: 6px; font-weight: 600;">
+            <input type="checkbox" name="remover_<?= h($chaveImg) ?>" value="1"> Remover foto atual
+          </label>
+        </div>
+      </div>
+      <?php else: ?>
+      <div class="upload-current">
+        <span class="file-pill">Sem foto</span>
+      </div>
+      <?php endif; ?>
+      <input name="<?= h($chaveImg) ?>" type="file" accept=".jpg,.jpeg,.png,.webp">
+      <p class="hint">Envie uma foto (JPG, PNG ou WEBP) para substituir a atual. Marque "Remover" para tirar a foto sem enviar outra.</p>
+    </div>
+    <?php endif; ?>
+
+    <div class="form-grid" style="margin-top: 4px;">
+      <?php foreach ($info['campos'] as $chave): if (!isset($campos[$chave])) continue;
+        [$rotulo, $tipo] = $campos[$chave];
+        $valor = $valores[$chave] ?? '';
+      ?>
+      <div class="field">
+        <label for="campo-<?= h($chave) ?>"><?= h($rotulo) ?></label>
+        <?php if ($tipo === 'textarea'): ?>
+        <textarea id="campo-<?= h($chave) ?>" name="<?= h($chave) ?>" rows="4"><?= h($valor) ?></textarea>
+        <?php else: ?>
+        <input id="campo-<?= h($chave) ?>" name="<?= h($chave) ?>" type="text" value="<?= h($valor) ?>">
+        <?php endif; ?>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit">Salvar</button>
+  </div>
+</form>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

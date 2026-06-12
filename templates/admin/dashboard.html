@@ -1,0 +1,150 @@
+<?php
+$active = 'dashboard';
+include __DIR__ . '/partials/header.html';
+?>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-num"><?= (int) $total_produtos ?></div>
+    <div class="stat-label">Produtos cadastrados</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num"><?= (int) $total_servicos ?></div>
+    <div class="stat-label">Serviços cadastrados</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num"><?= (int) $total_mensagens ?></div>
+    <div class="stat-label">Mensagens recebidas</div>
+  </div>
+  <div class="stat-card<?= $mensagens_nao_lidas > 0 ? ' stat-alert' : '' ?>">
+    <div class="stat-num"><?= (int) $mensagens_nao_lidas ?></div>
+    <div class="stat-label">Mensagens não lidas</div>
+  </div>
+</div>
+
+<div class="shortcuts-grid">
+  <a class="shortcut-card" href="<?= url_for('/admin/produtos/adicionar') ?>">
+    <span class="icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </span>
+    Novo produto
+  </a>
+  <a class="shortcut-card" href="<?= url_for('/admin/servicos/adicionar') ?>">
+    <span class="icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </span>
+    Novo serviço
+  </a>
+  <a class="shortcut-card" href="<?= url_for('/admin/conteudo') ?>">
+    <span class="icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </span>
+    Editar conteúdo do site
+  </a>
+</div>
+
+<div class="admin-card">
+  <div class="admin-card-head">
+    <div>
+      <h2>Produtos</h2>
+      <p class="card-desc">Catálogo exibido em /produtos.</p>
+    </div>
+    <a class="btn btn-primary btn-sm" href="<?= url_for('/admin/produtos/adicionar') ?>">+ Novo produto</a>
+  </div>
+
+  <?php if (empty($produtos)): ?>
+  <p class="card-desc">Nenhum produto cadastrado ainda.</p>
+  <?php else: ?>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Marca</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($produtos as $produto): $foto = media_url($produto['image_path'] ?? null); ?>
+        <tr>
+          <td>
+            <?php if ($foto): ?>
+              <img class="thumb" src="<?= h($foto) ?>" alt="">
+            <?php else: ?>
+              <span class="thumb" style="display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:11px;">sem foto</span>
+            <?php endif; ?>
+          </td>
+          <td><?= h($produto['name']) ?></td>
+          <td><?= h(category_label($produto['category'])) ?></td>
+          <td><?= h($produto['brand'] ?? '') ?></td>
+          <td>
+            <div class="row-actions">
+              <a class="btn btn-ghost btn-sm" href="<?= url_for('/admin/produtos/editar/' . $produto['id']) ?>">Editar</a>
+              <form method="post" action="<?= url_for('/admin/produtos/excluir/' . $produto['id']) ?>" onsubmit="return confirm('Excluir este produto? Essa ação não pode ser desfeita.');">
+                <?= csrf_field() ?>
+                <button class="btn btn-danger btn-sm" type="submit">Excluir</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+  <?php endif; ?>
+</div>
+
+<div class="admin-card">
+  <div class="admin-card-head">
+    <div>
+      <h2>Serviços</h2>
+      <p class="card-desc">Lista exibida em /servicos.</p>
+    </div>
+    <a class="btn btn-primary btn-sm" href="<?= url_for('/admin/servicos/adicionar') ?>">+ Novo serviço</a>
+  </div>
+
+  <?php if (empty($servicos)): ?>
+  <p class="card-desc">Nenhum serviço cadastrado ainda.</p>
+  <?php else: ?>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($servicos as $servico): $foto = media_url($servico['image_path'] ?? null); ?>
+        <tr>
+          <td>
+            <?php if ($foto): ?>
+              <img class="thumb" src="<?= h($foto) ?>" alt="">
+            <?php else: ?>
+              <span class="thumb" style="display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:11px;">sem foto</span>
+            <?php endif; ?>
+          </td>
+          <td><?= h($servico['name']) ?></td>
+          <td><?= h($servico['category'] ?? '') ?></td>
+          <td>
+            <div class="row-actions">
+              <a class="btn btn-ghost btn-sm" href="<?= url_for('/admin/servicos/editar/' . $servico['id']) ?>">Editar</a>
+              <form method="post" action="<?= url_for('/admin/servicos/excluir/' . $servico['id']) ?>" onsubmit="return confirm('Excluir este serviço? Essa ação não pode ser desfeita.');">
+                <?= csrf_field() ?>
+                <button class="btn btn-danger btn-sm" type="submit">Excluir</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+  <?php endif; ?>
+</div>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

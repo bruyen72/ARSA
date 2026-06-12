@@ -1,0 +1,215 @@
+<?php
+$theme = 'profundo';
+$tweak_accent = '#2a6fdb';
+$tweak_radius = 15;
+$extra_head = <<<'HTML'
+<style>
+  .hero-visual { position: relative; width: 100%; }
+  .hero-media {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+  }
+  .hero-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .hero-live-badge,
+  .hero-media-tag {
+    position: absolute;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: rgba(10, 39, 64, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .hero-live-badge {
+    top: 18px;
+    right: 18px;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+  .hero-live-badge .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #22c065;
+    animation: pulse-dot 1.6s ease-in-out infinite;
+  }
+  .hero-media-tag {
+    left: 18px;
+    bottom: 18px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-live-badge .dot { animation: none; opacity: 0; }
+  }
+  @media (max-width: 620px) {
+    .hero-media { width: 100%; max-width: 100%; }
+  }
+</style>
+HTML;
+include __DIR__ . '/partials/header.html';
+?>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" data-screen-label="Hero">
+    <div class="wrap hero-grid">
+      <div class="rv">
+        <span class="eyebrow"><span class="dot"></span><?= h(get_content('hero_eyebrow', 'Radiocomunicação em Mato Grosso')) ?></span>
+        <h1><?= h(get_content('hero_title_pre', 'Mais de 25 anos garantindo')) ?> <em><?= h(get_content('hero_title_destaque', 'comunicação sem falhas')) ?><span class="title-dot"></span></em></h1>
+        <p class="lead"><?= h(get_content('hero_lead', 'Mais do que oferecer equipamentos, entregamos suporte técnico e comunicação que funciona de verdade.')) ?></p>
+        <div class="hero-ctas">
+          <a class="btn btn-whatsapp" href="<?= h(whatsapp_link('Olá! Quero saber mais sobre as soluções da ARSA.')) ?>" target="_blank" rel="noopener">
+            <svg class="wa-icon" viewBox="0 0 448 512" aria-hidden="true"><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32 101.5 32 2 131.5 2 253.9c0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.5 224.1-221.9 0-59.3-25.2-115-67.1-157.1zM223.9 438.7c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.3 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.7-186.6 184.7zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+            Saiba mais
+          </a>
+          <a class="btn btn-ghost" href="<?= url_for('/servicos') ?>">Nossos serviços</a>
+        </div>
+      </div>
+      <div class="hero-visual rv rv-right" style="--rv-delay: 0.15s;">
+        <div class="hero-media">
+          <video class="hero-video" autoplay muted loop playsinline preload="metadata">
+            <source src="<?= url_for('/static/video/radio1.webm') ?>" type="video/webm">
+            <source src="<?= url_for('/static/video/radio1.mp4') ?>" type="video/mp4">
+          </video>
+          <span class="hero-live-badge"><span class="dot"></span> No ar</span>
+          <span class="hero-media-tag">Rádio + mapa de cobertura</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- QUEM SOMOS -->
+  <section class="section" data-screen-label="Quem somos">
+    <div class="wrap about-grid">
+      <div class="rv rv-left">
+        <div class="section-head">
+          <div class="kicker"><?= h(get_content('about_kicker', 'Quem somos')) ?></div>
+          <h2><?= h(get_content('about_title', 'Pioneiros em redes de comunicação no Mato Grosso')) ?></h2>
+          <p><?= h(get_content('about_text', 'Ao longo de mais de duas décadas, ajudamos empresas de diversos segmentos a manter suas operações conectadas, organizadas e eficientes.')) ?></p>
+          <p style="margin-top: 14px; color: var(--ink-soft); font-size: 17.5px;"><?= h(get_content('about_text_extra', 'Trabalhamos com locação de rádios nos formatos diário, quinzenal e mensal, oferecendo flexibilidade de acordo com a necessidade de cada cliente.')) ?></p>
+        </div>
+      </div>
+      <div class="rv rv-right">
+        <?php $aboutFoto = media_url(get_content('about_foto', '')); ?>
+        <?php if ($aboutFoto): ?>
+        <img src="<?= h($aboutFoto) ?>" alt="" style="width: 100%; height: 260px; object-fit: cover; border-radius: 16px;">
+        <?php else: ?>
+        <image-slot id="about-foto" style="width: 100%; height: 260px;" shape="rounded" radius="16" placeholder="Foto: equipe ou central de operação"></image-slot>
+        <?php endif; ?>
+        <div class="about-points">
+          <div class="point">
+            <span class="tick">✓</span>
+            <p><strong>Locação flexível:</strong> planos diário, quinzenal e mensal, do jeito que a sua operação precisa.</p>
+          </div>
+          <div class="point">
+            <span class="tick">✓</span>
+            <p><strong>Suporte técnico de verdade:</strong> coleta, reparo em laboratório e programação completa dos rádios.</p>
+          </div>
+          <div class="point">
+            <span class="tick">✓</span>
+            <p><strong>Tecnologia confiável:</strong> trabalhamos com Caltta, Motorola, Intelbras e Hytera.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS (PRÉVIA) -->
+  <section class="section" style="padding-top: 0;" data-screen-label="Serviços prévia">
+    <div class="wrap">
+      <div class="section-head center rv">
+        <div class="kicker">O que fazemos</div>
+        <h2>Tudo o que a sua comunicação precisa, em um lugar só</h2>
+        <p>Do rádio alugado para um evento de fim de semana ao sistema de repetição que cobre a fazenda inteira.</p>
+      </div>
+      <div class="card-grid">
+        <?php
+        $icones = [
+            0 => '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="7" width="10" height="14" rx="2" stroke="currentColor" stroke-width="2"></rect><path d="M10 7V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><path d="M10 17h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>',
+            1 => '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"></circle><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>',
+            2 => '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21V11" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="2"></circle><path d="M6.5 4.5a8 8 0 0 1 11 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>',
+        ];
+        $linkPadrao = [url_for('/produtos'), url_for('/servicos'), url_for('/servicos')];
+        $textoLink = ['Ver produtos', 'Conhecer serviços', 'Saiba como'];
+        foreach ($services as $i => $servico):
+            $foto = media_url($servico['image_path'] ?? null);
+            $delay = $i === 0 ? '' : ' style="--rv-delay: ' . ($i === 1 ? '0.12s' : '0.24s') . ';"';
+        ?>
+        <div class="card service-card rv"<?= $delay ?>>
+          <div class="service-photo">
+            <?php if ($foto): ?>
+              <img src="<?= h($foto) ?>" alt="<?= h($servico['name']) ?>">
+            <?php else: ?>
+              <image-slot shape="square" fit="cover" placeholder="Foto: <?= h($servico['name']) ?>"></image-slot>
+            <?php endif; ?>
+          </div>
+          <div class="icon"><?= $icones[$i] ?? $icones[0] ?></div>
+          <h3><?= h($servico['name']) ?></h3>
+          <p><?= h($servico['description'] ?? '') ?></p>
+          <a class="card-link" href="<?= $linkPadrao[$i] ?? url_for('/servicos') ?>"><?= $textoLink[$i] ?? 'Conhecer serviços' ?></a>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARCAS -->
+  <section class="brands-band" data-screen-label="Marcas">
+    <div class="wrap rv">
+      <div class="kicker-line">Marcas parceiras</div>
+      <div class="brand-carousel" aria-label="Marcas parceiras da ARSA">
+        <div class="brand-lightline" aria-hidden="true"></div>
+        <div class="brand-track">
+          <div class="brand-group">
+            <div class="brand-card"><img src="<?= url_for('/static/img/brands/caltta.png') ?>" alt="Caltta"></div>
+            <div class="brand-card"><img src="<?= url_for('/static/img/brands/motorola-solutions.svg') ?>" alt="Motorola Solutions"></div>
+            <div class="brand-card"><img src="<?= url_for('/static/img/brands/intelbras.svg') ?>" alt="Intelbras"></div>
+            <div class="brand-card"><img src="<?= url_for('/static/img/brands/hytera.svg') ?>" alt="Hytera"></div>
+          </div>
+          <div class="brand-group" aria-hidden="true">
+            <div class="brand-card"><img src="<?= url_for('/static/img/brands/caltta.png') ?>" alt=""></div>
+            <div class="brand-card"><img src="<?= url_for('/static/img/brands/motorola-solutions.svg') ?>" alt=""></div>
+            <div class="brand-card"><img src="<?= url_for('/static/img/brands/intelbras.svg') ?>" alt=""></div>
+            <div class="brand-card"><img src="<?= url_for('/static/img/brands/hytera.svg') ?>" alt=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 32px;" data-screen-label="CTA final">
+    <div class="wrap">
+      <div class="cta-band rv">
+        <div class="rings" aria-hidden="true"></div>
+        <div>
+          <h2>Fale com a nossa equipe</h2>
+          <p>Encontre a solução ideal para a sua operação. Atendemos Cuiabá e todo o estado do Mato Grosso.</p>
+        </div>
+        <a class="btn btn-whatsapp" href="<?= h(whatsapp_link('Olá! Quero encontrar a solução ideal para a minha operação.')) ?>" target="_blank" rel="noopener">
+          <svg class="wa-icon" viewBox="0 0 448 512" aria-hidden="true"><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32 101.5 32 2 131.5 2 253.9c0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.5 224.1-221.9 0-59.3-25.2-115-67.1-157.1zM223.9 438.7c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.3 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.7-186.6 184.7zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+          Chamar no WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

@@ -1,0 +1,8 @@
+# Bloqueia totalmente o acesso via navegador a esta pasta (banco de dados
+# e arquivo de credenciais geradas na primeira execução).
+Require all denied
+
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

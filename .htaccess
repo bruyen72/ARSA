@@ -1,0 +1,27 @@
+# Roteia todas as requisições que NÃO sejam arquivos/pastas existentes
+# para o index.php (roteador único do site).
+
+RewriteEngine On
+
+# Se o arquivo ou pasta solicitados existem de verdade (CSS, JS, imagens,
+# uploads, etc.), serve normalmente sem passar pelo roteador.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Caso contrário, envia para o roteador PHP.
+RewriteRule ^ index.php [L]
+
+# Bloqueia acesso direto ao banco de dados
+# (.image-slots.state.json continua acessível: é usado pelo image-slot.js
+# para mostrar as fotos de fallback no site)
+<FilesMatch "\.(db|sqlite)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule !mod_authz_core.c>
+    <FilesMatch "\.(db|sqlite)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>

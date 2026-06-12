@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><?= h($title) ?> — ARSA Radiocomunicação</title>
+<meta name="description" content="<?= h($meta_description ?? 'ARSA Radiocomunicação: locação, venda, manutenção e consultoria em rádios Caltta, Motorola, Intelbras e Hytera em Cuiabá - MT.') ?>">
+<meta property="og:title" content="<?= h($title) ?> — ARSA Radiocomunicação">
+<meta property="og:description" content="<?= h($meta_description ?? 'Locação, venda, manutenção e consultoria em radiocomunicação em Cuiabá - MT.') ?>">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:image" content="<?= url_for('/static/img/logo.png') ?>">
+<link rel="icon" href="<?= url_for('/static/img/logo.png') ?>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<?= url_for('/static/css/arsa.css') ?>">
+<style>
+  .flash-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 14px 18px; text-align: center; font-weight: 600; font-size: 14.5px; }
+  .flash-success { background: #1f9d55; color: #fff; }
+  .flash-error { background: #d3422f; color: #fff; }
+  .flash-info { background: var(--accent-deep); color: #fff; }
+</style>
+<?php if (!empty($extra_head)) { echo $extra_head; } ?>
+</head>
+<body data-anim="on" data-theme="<?= h($theme ?? 'claro') ?>">
+<script src="<?= url_for('/static/js/arsa.js') ?>"></script>
+<script src="<?= url_for('/static/js/image-slot.js') ?>"></script>
+
+<?php foreach (get_flashed_messages() as $flash): ?>
+<div class="flash-bar flash-<?= h($flash['category']) ?>"><?= h($flash['message']) ?></div>
+<?php endforeach; ?>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo-link" href="<?= url_for('/') ?>" aria-label="ARSA — Início">
+      <img src="<?= url_for('/static/img/logo.png') ?>" alt="ARSA">
+    </a>
+    <nav class="main-nav" aria-label="Navegação principal">
+      <a href="<?= url_for('/') ?>"<?= ($active ?? '') === 'home' ? ' aria-current="page"' : '' ?>>Início</a>
+      <a href="<?= url_for('/produtos') ?>"<?= ($active ?? '') === 'produtos' ? ' aria-current="page"' : '' ?>>Produtos</a>
+      <a href="<?= url_for('/servicos') ?>"<?= ($active ?? '') === 'servicos' ? ' aria-current="page"' : '' ?>>Serviços</a>
+      <a href="<?= url_for('/quem-somos') ?>"<?= ($active ?? '') === 'quem-somos' ? ' aria-current="page"' : '' ?>>Quem Somos</a>
+      <a href="<?= url_for('/contato') ?>"<?= ($active ?? '') === 'contato' ? ' aria-current="page"' : '' ?>>Contato</a>
+    </nav>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
