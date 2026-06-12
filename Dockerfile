@@ -1,7 +1,10 @@
 FROM php:8.2-apache
 
 # Extensão SQLite (banco usado pelo site)
-RUN docker-php-ext-install pdo pdo_sqlite \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install pdo pdo_sqlite \
     && a2enmod rewrite \
     && sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
