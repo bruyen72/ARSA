@@ -65,7 +65,7 @@ function seed_content(): array
         // Página Quem Somos (texto institucional completo)
         'quem_somos_titulo' => 'Quem somos',
         'quem_somos_texto' => "A ARSA é uma empresa de Cuiabá - MT especializada em radiocomunicação, com mais de 25 anos de experiência ajudando empresas de diversos segmentos a manter suas operações conectadas.\n\nTrabalhamos com locação e venda de rádios portáteis, móveis e repetidoras das marcas Caltta, Motorola, Intelbras e Hytera, além de oferecer manutenção técnica completa, consultoria e regularização junto à ANATEL.\n\nNossa missão é entregar comunicação que funciona de verdade: equipamentos confiáveis, suporte técnico próximo e flexibilidade para cada tipo de operação, do evento de fim de semana à fazenda inteira.",
-        'quem_somos_foto' => '',
+        'quem_somos_foto' => 'static/img/empresa.jpeg',
 
         // Página Produtos
         'produtos_titulo' => 'Nossos produtos',
