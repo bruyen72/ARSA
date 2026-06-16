@@ -557,8 +557,6 @@ function content_sections(): array
             'label' => 'Início',
             'descricao' => 'Banner principal e seção "Quem somos" exibidos na página inicial.',
             'campos' => ['hero_eyebrow', 'hero_title_pre', 'hero_title_destaque', 'hero_lead', 'about_kicker', 'about_title', 'about_text', 'about_text_extra'],
-            'imagem' => 'about_foto',
-            'imagem_label' => 'Foto da seção "Quem somos" (página inicial)',
         ],
         'produtos' => [
             'label' => 'Produtos',
@@ -567,10 +565,8 @@ function content_sections(): array
         ],
         'somos' => [
             'label' => 'Quem Somos',
-            'descricao' => 'Texto institucional completo, foto e selo de garantia.',
+            'descricao' => 'Texto institucional completo e selo de garantia.',
             'campos' => ['quem_somos_titulo', 'quem_somos_texto', 'warranty_years', 'warranty_title', 'warranty_text'],
-            'imagem' => 'quem_somos_foto',
-            'imagem_label' => 'Foto da página Quem Somos',
         ],
         'contato' => [
             'label' => 'Contato',
