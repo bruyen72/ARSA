@@ -148,7 +148,7 @@ include __DIR__ . '/partials/header.html';
         <div class="detail-photo rv" id="foto-wrap">
           <?php if ($foto): ?>
             <div class="foto-zoom-area" id="foto-zoom-area">
-              <img id="foto-principal" data-index="0" src="<?= h($foto) ?>" alt="<?= h($product['name']) ?>" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+              <img id="foto-principal" data-index="0" src="<?= h($foto) ?>" alt="<?= h($product['name']) ?>">
             </div>
           <?php else: ?>
             <image-slot shape="rounded" radius="12" fit="contain" placeholder="Foto: <?= h($product['name']) ?>"></image-slot>

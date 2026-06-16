@@ -209,6 +209,54 @@ function verify_csrf(): void
 // ----------------------------------------------------------------------
 
 /**
+ * Redimensiona uma imagem no disco para no máximo $maxW x $maxH pixels,
+ * mantendo proporção. Preserva transparência em PNG.
+ * Silencioso: não lança exceção — se GD não estiver disponível, ignora.
+ */
+function resize_image_if_needed(string $path, int $maxW = 1200, int $maxH = 1200): void
+{
+    $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+    if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) return;
+    if (!function_exists('imagecreatefromjpeg')) return;
+
+    $size = @getimagesize($path);
+    if (!$size) return;
+    [$origW, $origH] = $size;
+    if ($origW <= $maxW && $origH <= $maxH) return; // já é pequena o suficiente
+
+    $ratio = min($maxW / $origW, $maxH / $origH);
+    $newW = (int) round($origW * $ratio);
+    $newH = (int) round($origH * $ratio);
+
+    $src = match($ext) {
+        'png'  => @imagecreatefrompng($path),
+        'webp' => @imagecreatefromwebp($path),
+        default => @imagecreatefromjpeg($path),
+    };
+    if (!$src) return;
+
+    $dst = imagecreatetruecolor($newW, $newH);
+
+    if ($ext === 'png') {
+        imagealphablending($dst, false);
+        imagesavealpha($dst, true);
+        $transparent = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+        imagefilledrectangle($dst, 0, 0, $newW, $newH, $transparent);
+    }
+
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
+
+    match($ext) {
+        'png'  => imagepng($dst, $path, 8),
+        'webp' => imagewebp($dst, $path, 85),
+        default => imagejpeg($dst, $path, 88),
+    };
+
+    imagedestroy($src);
+    imagedestroy($dst);
+}
+
+/**
  * Processa um upload vindo de $_FILES[$field]. Retorna null se nenhum
  * arquivo foi enviado. Lança RuntimeException em caso de erro.
  *
@@ -248,6 +296,9 @@ function handle_upload(string $field, array $allowedExt, string $subdir): ?array
     if (!move_uploaded_file($file['tmp_name'], $dest)) {
         throw new RuntimeException('Falha ao salvar o arquivo no servidor.');
     }
+
+    // Redimensiona imagens grandes automaticamente (máx 1200x1200)
+    resize_image_if_needed($dest);
 
     $relative = $subdir . '/' . $filename;
     save_file_metadata($file['name'], $relative);
