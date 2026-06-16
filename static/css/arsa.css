@@ -78,11 +78,8 @@ p { text-wrap: pretty; }
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 185px;
-  height: 90px;
-  background: #fff;
-  border-radius: 10px;
-  padding: 6px 10px;
+  width: 200px;
+  height: 72px;
   transition: width 0.3s ease, height 0.3s ease;
 }
 .logo-link img {
@@ -91,8 +88,8 @@ p { text-wrap: pretty; }
   object-fit: contain;
 }
 .site-header.scrolled .logo-link {
-  width: 155px;
-  height: 76px;
+  width: 170px;
+  height: 62px;
 }
 
 .main-nav { display: flex; align-items: center; gap: 6px; }
@@ -949,12 +946,12 @@ body[data-theme="vibrante"] .specs-card {
 }
 @media (max-width: 680px) {
   .logo-link {
-    width: 145px;
-    height: 70px;
+    width: 160px;
+    height: 60px;
   }
   .site-header.scrolled .logo-link {
-    width: 125px;
-    height: 60px;
+    width: 140px;
+    height: 52px;
   }
   .main-nav {
     display: none;
