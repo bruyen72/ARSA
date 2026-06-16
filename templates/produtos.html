@@ -34,7 +34,7 @@ include __DIR__ . '/partials/header.html';
         <article class="catalog-card rv in">
           <div class="photo">
             <?php if ($foto): ?>
-              <img src="<?= h($foto) ?>" alt="<?= h($produto['name']) ?>" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;">
+              <img src="<?= h($foto) ?>" alt="<?= h($produto['name']) ?>">
             <?php else: ?>
               <image-slot id="foto-<?= (int) $produto['id'] ?>" shape="rounded" radius="10" fit="contain" placeholder="Foto: <?= h($produto['name']) ?>"></image-slot>
             <?php endif; ?>
