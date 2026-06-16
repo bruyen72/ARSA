@@ -78,8 +78,8 @@ p { text-wrap: pretty; }
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 220px;
-  height: 80px;
+  width: 180px;
+  height: 65px;
   transition: width 0.3s ease, height 0.3s ease;
 }
 .logo-link img {
@@ -88,8 +88,8 @@ p { text-wrap: pretty; }
   object-fit: contain;
 }
 .site-header.scrolled .logo-link {
-  width: 180px;
-  height: 66px;
+  width: 155px;
+  height: 56px;
 }
 
 .main-nav { display: flex; align-items: center; gap: 6px; }
