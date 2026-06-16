@@ -13,7 +13,7 @@ function seed_services(): array
         [
             'name' => 'Rádios prontos para a operação',
             'category' => 'Locação e venda',
-            'description' => 'Equipamentos portáteis, móveis e repetidoras para diária, quinzena ou mês, já programados para a sua equipe usar sem enrolação.',
+            'description' => 'Soluções completas em radiocomunicação com rádios portáteis, móveis e repetidoras já configurados e preparados para entrar em operação.',
             'features' => [
                 'Locação diária, quinzenal ou mensal',
                 'Equipamentos já programados',
@@ -24,7 +24,7 @@ function seed_services(): array
         [
             'name' => 'Coleta, diagnóstico e reparo',
             'category' => 'Manutenção técnica',
-            'description' => 'Buscamos os rádios, avaliamos em bancada e devolvemos funcionando, com programação, testes e suporte direto.',
+            'description' => 'Da coleta à entrega, garantimos um serviço completo: avaliação em bancada, programação, testes de funcionamento e suporte técnico para manter sua operação conectada.',
             'features' => [
                 'Coleta do equipamento',
                 'Diagnóstico e reparo em laboratório',
@@ -35,7 +35,7 @@ function seed_services(): array
         [
             'name' => 'Rede dimensionada do jeito certo',
             'category' => 'Consultoria e ANATEL',
-            'description' => 'Visitamos a operação, planejamos cobertura, repetição e canais, e cuidamos da regularização para a frequência operar com segurança.',
+            'description' => 'Visitamos sua operação, analisamos as necessidades de comunicação, planejamos a cobertura, configuramos canais e repetidoras e acompanhamos a regularização necessária para uma operação segura, eficiente e sem interrupções.',
             'features' => [
                 'Visita técnica e planejamento de cobertura',
                 'Definição de canais e repetição',
@@ -60,7 +60,7 @@ function seed_content(): array
         'about_title' => 'Pioneiros em redes de comunicação no Mato Grosso',
         'about_text' => 'Ao longo de mais de duas décadas, ajudamos empresas de diversos segmentos a manter suas operações conectadas, organizadas e eficientes.',
         'about_text_extra' => 'Trabalhamos com locação de rádios nos formatos diário, quinzenal e mensal, oferecendo flexibilidade de acordo com a necessidade de cada cliente.',
-        'about_foto' => '',
+        'about_foto' => 'static/img/radio-caltta.png',
 
         // Página Quem Somos (texto institucional completo)
         'quem_somos_titulo' => 'Quem somos',
