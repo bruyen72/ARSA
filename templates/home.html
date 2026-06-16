@@ -84,6 +84,7 @@ include __DIR__ . '/partials/header.html';
       <div class="hero-visual rv rv-right" style="--rv-delay: 0.15s;">
         <div class="hero-media">
           <video class="hero-video" autoplay muted loop playsinline preload="metadata">
+            <source src="<?= url_for('/static/video/radio-mapa.webm') ?>" type="video/webm">
             <source src="<?= url_for('/static/video/radio-mapa.mp4') ?>" type="video/mp4">
           </video>
           <span class="hero-live-badge"><span class="dot"></span> No ar</span>
