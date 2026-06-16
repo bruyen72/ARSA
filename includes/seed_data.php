@@ -60,7 +60,7 @@ function seed_content(): array
         'about_title' => 'Pioneiros em redes de comunicação no Mato Grosso',
         'about_text' => 'Ao longo de mais de duas décadas, ajudamos empresas de diversos segmentos a manter suas operações conectadas, organizadas e eficientes.',
         'about_text_extra' => 'Trabalhamos com locação de rádios nos formatos diário, quinzenal e mensal, oferecendo flexibilidade de acordo com a necessidade de cada cliente.',
-        'about_foto' => 'static/img/radio-caltta.png',
+        'about_foto' => 'static/img/empresa.jpeg',
 
         // Página Quem Somos (texto institucional completo)
         'quem_somos_titulo' => 'Quem somos',
