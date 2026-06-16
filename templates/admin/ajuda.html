@@ -1,0 +1,375 @@
+<?php
+$active = 'ajuda';
+include __DIR__ . '/partials/header.html';
+?>
+
+<style>
+.ajuda-section {
+  background: var(--adm-card);
+  border: 1px solid var(--adm-border);
+  border-radius: 10px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+.ajuda-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  background: var(--adm-bg);
+  border-bottom: 1px solid var(--adm-border);
+  cursor: pointer;
+  user-select: none;
+}
+.ajuda-section-header:hover {
+  background: var(--adm-hover);
+}
+.ajuda-section-header .icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.ajuda-section-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--adm-text);
+  margin: 0;
+  flex: 1;
+}
+.ajuda-section-header .chevron {
+  font-size: 18px;
+  color: var(--adm-muted);
+  transition: transform .2s;
+}
+.ajuda-section-header.open .chevron {
+  transform: rotate(90deg);
+}
+.ajuda-section-body {
+  padding: 20px 24px 24px;
+  display: none;
+}
+.ajuda-section-body.open {
+  display: block;
+}
+.ajuda-step {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.ajuda-step:last-child {
+  margin-bottom: 0;
+}
+.ajuda-num {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: var(--adm-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+.ajuda-step-text {
+  color: var(--adm-text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.ajuda-step-text strong {
+  color: var(--adm-text);
+}
+.ajuda-tip {
+  background: #e8f4fd;
+  border-left: 3px solid var(--adm-primary);
+  border-radius: 0 6px 6px 0;
+  padding: 10px 14px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #1a5276;
+  line-height: 1.55;
+}
+.ajuda-warn {
+  background: #fef9e7;
+  border-left: 3px solid #f39c12;
+  border-radius: 0 6px 6px 0;
+  padding: 10px 14px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #7d6608;
+  line-height: 1.55;
+}
+.ajuda-intro {
+  background: var(--adm-card);
+  border: 1px solid var(--adm-border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  color: var(--adm-text);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.ajuda-intro h1 {
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+.ajuda-badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.ajuda-badge {
+  background: var(--adm-bg);
+  border: 1px solid var(--adm-border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--adm-muted);
+  font-weight: 500;
+}
+</style>
+
+<div class="ajuda-intro">
+  <h1>📘 Tutorial do painel administrativo</h1>
+  <p>Este guia explica como usar cada seção do painel. Clique em qualquer título abaixo para expandir as instruções.</p>
+  <div class="ajuda-badge-list">
+    <span class="ajuda-badge">Conteúdo do site</span>
+    <span class="ajuda-badge">Produtos</span>
+    <span class="ajuda-badge">Serviços</span>
+    <span class="ajuda-badge">Mensagens</span>
+    <span class="ajuda-badge">Alterar senha</span>
+  </div>
+</div>
+
+<!-- CONTEÚDO DO SITE -->
+<div class="ajuda-section">
+  <div class="ajuda-section-header open" onclick="toggleAjuda(this)">
+    <span class="icon">✏️</span>
+    <h2>Conteúdo do site — editar textos e fotos</h2>
+    <span class="chevron open">›</span>
+  </div>
+  <div class="ajuda-section-body open">
+    <p style="font-size:14px;color:var(--adm-muted);margin:0 0 16px;">Acesse pelo menu <strong>Conteúdo do site</strong>. Há 4 abas: <strong>Início</strong>, <strong>Produtos</strong>, <strong>Quem Somos</strong> e <strong>Contato</strong>.</p>
+
+    <div class="ajuda-step">
+      <div class="ajuda-num">1</div>
+      <div class="ajuda-step-text">Clique na aba que deseja editar (ex: <strong>Início</strong>).</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">2</div>
+      <div class="ajuda-step-text">Edite os campos de texto normalmente. Campos com caixa maior aceitam parágrafos — pule uma linha em branco para separar parágrafos.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">3</div>
+      <div class="ajuda-step-text">Para trocar a <strong>foto</strong> da seção, clique em <em>"Escolher arquivo"</em> e selecione uma imagem JPG ou PNG do seu computador.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">4</div>
+      <div class="ajuda-step-text">Clique em <strong>Salvar alterações</strong> no final da página.</div>
+    </div>
+
+    <div class="ajuda-tip">
+      💡 <strong>Dica:</strong> Imagens ideais têm pelo menos 800×600 px. Após salvar, a foto aparece imediatamente no site.
+    </div>
+    <div class="ajuda-warn">
+      ⚠️ <strong>Atenção:</strong> Se você trocar a foto, a foto antiga é removida automaticamente. Guarde um backup antes se precisar.
+    </div>
+  </div>
+</div>
+
+<!-- PRODUTOS -->
+<div class="ajuda-section">
+  <div class="ajuda-section-header" onclick="toggleAjuda(this)">
+    <span class="icon">📦</span>
+    <h2>Produtos — adicionar, editar e excluir</h2>
+    <span class="chevron">›</span>
+  </div>
+  <div class="ajuda-section-body">
+    <p style="font-size:14px;color:var(--adm-muted);margin:0 0 16px;">Acesse pelo Dashboard clicando em <strong>Produtos</strong> ou pelo link direto <code>/admin/produtos/adicionar</code>.</p>
+
+    <strong style="font-size:14px;display:block;margin-bottom:10px;">➕ Adicionar novo produto</strong>
+    <div class="ajuda-step">
+      <div class="ajuda-num">1</div>
+      <div class="ajuda-step-text">No Dashboard, clique em <strong>"+ Novo produto"</strong>.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">2</div>
+      <div class="ajuda-step-text">Preencha: <strong>Nome</strong>, <strong>Categoria</strong>, <strong>Descrição curta</strong>, <strong>Preço</strong> e <strong>Estoque</strong>.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">3</div>
+      <div class="ajuda-step-text">Envie a <strong>foto principal</strong> (obrigatório) e até 4 fotos adicionais (opcional).</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">4</div>
+      <div class="ajuda-step-text">Você pode anexar um <strong>PDF</strong> (catálogo ou ficha técnica) — é opcional.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">5</div>
+      <div class="ajuda-step-text">Clique em <strong>Salvar produto</strong>.</div>
+    </div>
+
+    <strong style="font-size:14px;display:block;margin:18px 0 10px;">✏️ Editar produto existente</strong>
+    <div class="ajuda-step">
+      <div class="ajuda-num">1</div>
+      <div class="ajuda-step-text">No Dashboard, na lista de produtos, clique no ícone de <strong>lápis ✏️</strong> ao lado do produto.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">2</div>
+      <div class="ajuda-step-text">Altere os campos desejados e clique <strong>Atualizar produto</strong>.</div>
+    </div>
+
+    <strong style="font-size:14px;display:block;margin:18px 0 10px;">🗑️ Excluir produto</strong>
+    <div class="ajuda-step">
+      <div class="ajuda-num">1</div>
+      <div class="ajuda-step-text">Na lista de produtos, clique no ícone de <strong>lixeira 🗑️</strong>. Uma confirmação aparece — confirme para excluir.</div>
+    </div>
+
+    <div class="ajuda-warn">
+      ⚠️ <strong>Atenção:</strong> A exclusão é permanente. As fotos e PDF do produto também são removidos.
+    </div>
+  </div>
+</div>
+
+<!-- SERVIÇOS -->
+<div class="ajuda-section">
+  <div class="ajuda-section-header" onclick="toggleAjuda(this)">
+    <span class="icon">🔧</span>
+    <h2>Serviços — adicionar, editar e excluir</h2>
+    <span class="chevron">›</span>
+  </div>
+  <div class="ajuda-section-body">
+    <p style="font-size:14px;color:var(--adm-muted);margin:0 0 16px;">O funcionamento é igual ao de produtos. Acesse pelo Dashboard, seção <strong>Serviços</strong>.</p>
+
+    <div class="ajuda-step">
+      <div class="ajuda-num">1</div>
+      <div class="ajuda-step-text">Clique em <strong>"+ Novo serviço"</strong> no Dashboard.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">2</div>
+      <div class="ajuda-step-text">Preencha: <strong>Nome</strong>, <strong>Categoria</strong>, <strong>Descrição</strong> e <strong>Características</strong> (uma por linha).</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">3</div>
+      <div class="ajuda-step-text">Envie uma imagem para ilustrar o serviço (opcional).</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">4</div>
+      <div class="ajuda-step-text">Clique em <strong>Salvar serviço</strong>.</div>
+    </div>
+
+    <div class="ajuda-tip">
+      💡 As características aparecem como lista de tópicos na página pública de serviços. Escreva cada característica em uma linha separada.
+    </div>
+  </div>
+</div>
+
+<!-- MENSAGENS -->
+<div class="ajuda-section">
+  <div class="ajuda-section-header" onclick="toggleAjuda(this)">
+    <span class="icon">✉️</span>
+    <h2>Mensagens — formulário de contato</h2>
+    <span class="chevron">›</span>
+  </div>
+  <div class="ajuda-section-body">
+    <p style="font-size:14px;color:var(--adm-muted);margin:0 0 16px;">Toda mensagem enviada pelo visitante através da página <strong>Contato</strong> aparece aqui.</p>
+
+    <div class="ajuda-step">
+      <div class="ajuda-num">1</div>
+      <div class="ajuda-step-text">Clique em <strong>Mensagens</strong> no menu lateral. O número em vermelho indica mensagens não lidas.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">2</div>
+      <div class="ajuda-step-text">Clique em <strong>"Marcar como lida"</strong> para marcar a mensagem como lida (ou desfazer).</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">3</div>
+      <div class="ajuda-step-text">Clique em <strong>"Excluir"</strong> para remover a mensagem permanentemente.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">4</div>
+      <div class="ajuda-step-text">Para responder o cliente, copie o e-mail exibido na mensagem e responda pelo seu e-mail normalmente.</div>
+    </div>
+
+    <div class="ajuda-tip">
+      💡 O painel não envia e-mails automaticamente. As mensagens ficam salvas aqui para você consultar quando quiser.
+    </div>
+  </div>
+</div>
+
+<!-- SENHA -->
+<div class="ajuda-section">
+  <div class="ajuda-section-header" onclick="toggleAjuda(this)">
+    <span class="icon">🔑</span>
+    <h2>Alterar senha de acesso</h2>
+    <span class="chevron">›</span>
+  </div>
+  <div class="ajuda-section-body">
+    <div class="ajuda-step">
+      <div class="ajuda-num">1</div>
+      <div class="ajuda-step-text">Clique em <strong>Alterar senha</strong> no menu lateral.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">2</div>
+      <div class="ajuda-step-text">Digite a <strong>senha atual</strong> para confirmar sua identidade.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">3</div>
+      <div class="ajuda-step-text">Digite a <strong>nova senha</strong> (mínimo 8 caracteres) e repita no campo de confirmação.</div>
+    </div>
+    <div class="ajuda-step">
+      <div class="ajuda-num">4</div>
+      <div class="ajuda-step-text">Clique em <strong>Alterar senha</strong>. Você continuará logado com a nova senha.</div>
+    </div>
+
+    <div class="ajuda-warn">
+      ⚠️ <strong>Atenção:</strong> Escolha uma senha segura com letras, números e símbolos. Não compartilhe com ninguém.
+    </div>
+  </div>
+</div>
+
+<!-- DÚVIDAS GERAIS -->
+<div class="ajuda-section">
+  <div class="ajuda-section-header" onclick="toggleAjuda(this)">
+    <span class="icon">❓</span>
+    <h2>Dúvidas frequentes</h2>
+    <span class="chevron">›</span>
+  </div>
+  <div class="ajuda-section-body">
+
+    <strong style="font-size:14px;display:block;margin-bottom:8px;">Alterações no site não aparecem?</strong>
+    <p style="font-size:14px;color:var(--adm-muted);margin:0 0 16px;">Após salvar, force a atualização do navegador com <strong>Ctrl + F5</strong> (Windows) ou <strong>Cmd + Shift + R</strong> (Mac). Se o site estiver hospedado no Render, aguarde até 30 segundos após o deploy.</p>
+
+    <strong style="font-size:14px;display:block;margin-bottom:8px;">Qual o tamanho máximo de imagem?</strong>
+    <p style="font-size:14px;color:var(--adm-muted);margin:0 0 16px;">O limite de upload é de <strong>5 MB</strong> por arquivo. Formatos aceitos: JPG, JPEG, PNG e WEBP. Para fotos de produto, prefira imagens quadradas (ex: 800×800 px).</p>
+
+    <strong style="font-size:14px;display:block;margin-bottom:8px;">Posso fazer upload diretamente nas páginas do site (fora do painel)?</strong>
+    <p style="font-size:14px;color:var(--adm-muted);margin:0 0 16px;">Não. Os uploads são bloqueados nas páginas públicas. <strong>Somente o painel admin</strong> permite enviar e gerenciar imagens e arquivos.</p>
+
+    <strong style="font-size:14px;display:block;margin-bottom:8px;">O banco de dados é resetado depois de um deploy?</strong>
+    <p style="font-size:14px;color:var(--adm-muted);margin:0 0 0;">Sim. O site usa SQLite no plano gratuito do Render, que não persiste arquivos entre deploys. Conteúdo padrão é recriado automaticamente. Produtos e mensagens cadastrados depois do deploy ficam disponíveis até o próximo redeploy.</p>
+
+  </div>
+</div>
+
+<script>
+function toggleAjuda(header) {
+  const isOpen = header.classList.contains('open');
+  // fecha todos
+  document.querySelectorAll('.ajuda-section-header').forEach(h => {
+    h.classList.remove('open');
+    h.querySelector('.chevron').classList.remove('open');
+    h.nextElementSibling.classList.remove('open');
+  });
+  // abre o clicado se estava fechado
+  if (!isOpen) {
+    header.classList.add('open');
+    header.querySelector('.chevron').classList.add('open');
+    header.nextElementSibling.classList.add('open');
+  }
+}
+</script>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

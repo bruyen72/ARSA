@@ -91,6 +91,9 @@ $rotas = [
     ['GET', '#^/admin/mensagens$#', 'admin_mensagens_page'],
     ['POST', '#^/admin/mensagens/marcar/(\d+)$#', 'admin_mensagem_marcar'],
     ['POST', '#^/admin/mensagens/excluir/(\d+)$#', 'admin_mensagem_excluir'],
+
+    // ---- Admin: ajuda -----------------------------------------------------
+    ['GET', '#^/admin/ajuda$#', 'admin_ajuda_page'],
 ];
 
 foreach ($rotas as [$rotaMetodo, $padrao, $handler]) {
