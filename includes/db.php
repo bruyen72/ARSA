@@ -134,33 +134,46 @@ function generate_strong_password(int $length = 14): string
 }
 
 /**
- * Sincroniza os textos dos serviços com seed_data.php.
- * Incrementar $version sempre que os textos mudarem — garante que o banco
- * existente seja atualizado mesmo sem apagar o DB.
+ * Garante que os textos dos serviços no banco estão atualizados.
+ * Usa migrações por texto antigo → texto novo (idempotente, sem versão).
+ * Roda em cada requisição mas só faz UPDATE quando ainda há texto desatualizado.
  */
 function sync_services(PDO $pdo): void
 {
-    $version = '2'; // ← incrementar aqui quando mudar textos de serviços
+    // Cada entrada: [campo_alvo, valor_antigo, valor_novo]
+    $migracoes = [
+        // Serviço 1 — descrição
+        ['col' => 'description',
+         'old' => 'Equipamentos portáteis, móveis e repetidoras para diária, quinzena ou mês, já programados para a sua equipe usar sem enrolação.',
+         'new' => 'Soluções completas em radiocomunicação com rádios portáteis, móveis e repetidoras já configurados e preparados para entrar em operação.'],
+        // Serviço 2 — descrição
+        ['col' => 'description',
+         'old' => 'Buscamos os rádios, avaliamos em bancada e devolvemos funcionando, com programação, testes e suporte direto.',
+         'new' => 'Da coleta à entrega, garantimos um serviço completo: avaliação em bancada, programação, testes de funcionamento e suporte técnico para manter sua operação conectada.'],
+        // Serviço 3 — nome
+        ['col' => 'name',
+         'old' => 'Rede dimensionada do jeito certo',
+         'new' => 'Rede planejada e dimensionada para máxima eficiência operacional.'],
+        // Serviço 3 — categoria
+        ['col' => 'category',
+         'old' => 'Consultoria e ANATEL',
+         'new' => 'Consultoria para licenciamento junto à ANATEL'],
+        // Serviço 3 — descrição (texto longo → curto)
+        ['col' => 'description',
+         'old' => 'Visitamos sua operação, analisamos as necessidades de comunicação, planejamos a cobertura, configuramos canais e repetidoras e acompanhamos a regularização necessária para uma operação segura, eficiente e sem interrupções.',
+         'new' => 'Analisamos sua operação, planejamos a cobertura e cuidamos da configuração e regularização da comunicação.'],
+        // Serviço 3 — descrição (variação gerada pelo sync anterior)
+        ['col' => 'description',
+         'old' => 'Visitamos sua operação, analisamos as necessidades de comunicação, planejamos a cobertura, configuramos canais e repetidoras e acompanhamos a regularização necessária para uma operação segura, eficiente e sem interrupções',
+         'new' => 'Analisamos sua operação, planejamos a cobertura e cuidamos da configuração e regularização da comunicação.'],
+    ];
 
-    $row = $pdo->query("SELECT valor FROM site_content WHERE chave = 'seed_services_version'")->fetch();
-    if ($row && $row['valor'] >= $version) {
-        return;
+    foreach ($migracoes as $m) {
+        // PDO não permite bind de nomes de coluna — monta query diretamente (seguro: coluna vem do array interno)
+        $col = $m['col'];
+        $pdo->prepare("UPDATE services SET {$col} = :new WHERE {$col} = :old")
+            ->execute([':new' => $m['new'], ':old' => $m['old']]);
     }
-
-    $upd = $pdo->prepare('UPDATE services SET description = :desc, features = :feat WHERE name = :name');
-    foreach (seed_services() as $s) {
-        $upd->execute([
-            ':desc' => $s['description'],
-            ':feat' => json_encode($s['features'], JSON_UNESCAPED_UNICODE),
-            ':name' => $s['name'],
-        ]);
-    }
-
-    $pdo->prepare("
-        INSERT INTO site_content (chave, valor)
-        VALUES ('seed_services_version', :v)
-        ON CONFLICT(chave) DO UPDATE SET valor = excluded.valor
-    ")->execute([':v' => $version]);
 }
 
 /**
