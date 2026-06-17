@@ -166,6 +166,10 @@ function sync_services(PDO $pdo): void
         ['col' => 'description',
          'old' => 'Visitamos sua operação, analisamos as necessidades de comunicação, planejamos a cobertura, configuramos canais e repetidoras e acompanhamos a regularização necessária para uma operação segura, eficiente e sem interrupções',
          'new' => 'Analisamos sua operação, planejamos a cobertura e cuidamos da configuração e regularização da comunicação.'],
+        // Serviço 3 — descrição (texto atual no banco ao vivo)
+        ['col' => 'description',
+         'old' => 'Visitamos a operação, planejamos cobertura, repetição e canais, e cuidamos da regularização para a frequência operar com segurança.',
+         'new' => 'Analisamos sua operação, planejamos a cobertura e cuidamos da configuração e regularização da comunicação.'],
     ];
 
     foreach ($migracoes as $m) {
