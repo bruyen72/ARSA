@@ -116,6 +116,7 @@ function init_schema(PDO $pdo): void
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_messages_created ON messages (created_at)");
 
     seed_if_empty($pdo);
+    sync_services($pdo);
 }
 
 /**
@@ -130,6 +131,36 @@ function generate_strong_password(int $length = 14): string
         $senha .= $chars[random_int(0, $max)];
     }
     return $senha;
+}
+
+/**
+ * Sincroniza os textos dos serviços com seed_data.php.
+ * Incrementar $version sempre que os textos mudarem — garante que o banco
+ * existente seja atualizado mesmo sem apagar o DB.
+ */
+function sync_services(PDO $pdo): void
+{
+    $version = '2'; // ← incrementar aqui quando mudar textos de serviços
+
+    $row = $pdo->query("SELECT valor FROM site_content WHERE chave = 'seed_services_version'")->fetch();
+    if ($row && $row['valor'] >= $version) {
+        return;
+    }
+
+    $upd = $pdo->prepare('UPDATE services SET description = :desc, features = :feat WHERE name = :name');
+    foreach (seed_services() as $s) {
+        $upd->execute([
+            ':desc' => $s['description'],
+            ':feat' => json_encode($s['features'], JSON_UNESCAPED_UNICODE),
+            ':name' => $s['name'],
+        ]);
+    }
+
+    $pdo->prepare("
+        INSERT INTO site_content (chave, valor)
+        VALUES ('seed_services_version', :v)
+        ON CONFLICT(chave) DO UPDATE SET valor = excluded.valor
+    ")->execute([':v' => $version]);
 }
 
 /**
