@@ -133,7 +133,7 @@ function admin_produto_form(?string $id = null): void
         'name' => '',
         'description' => '',
         'brand' => '',
-        'category' => array_key_first(CATEGORY_LABELS),
+        'category' => array_key_first(get_categories()),
         'specs' => [],
         'highlights' => [],
         'image_path' => null,
@@ -158,7 +158,7 @@ function admin_produto_form(?string $id = null): void
     echo render_template('admin/produto_form.html', [
         'title' => $id !== null ? 'Editar produto' : 'Novo produto',
         'product' => $product,
-        'categories' => CATEGORY_LABELS,
+        'categories' => get_categories(),
     ]);
 }
 
@@ -187,7 +187,7 @@ function save_produto(?string $id): void
 
     $voltarPara = $id !== null ? "/admin/produtos/editar/{$id}" : '/admin/produtos/adicionar';
 
-    if ($name === '' || !isset(CATEGORY_LABELS[$category])) {
+    if ($name === '' || !isset(get_categories()[$category])) {
         flash('Preencha o nome e escolha uma categoria válida.', 'error');
         redirect($voltarPara);
     }
@@ -692,6 +692,100 @@ function admin_mensagem_excluir(string $id): void
 
     flash('Mensagem excluída.', 'success');
     redirect('/admin/mensagens');
+}
+
+// ----------------------------------------------------------------------
+// Categorias de produtos (gerenciadas no banco via site_content)
+// ----------------------------------------------------------------------
+
+function admin_categorias_page(): void
+{
+    require_admin();
+
+    echo render_template('admin/categorias.html', [
+        'title'      => 'Categorias de produtos',
+        'categories' => get_categories(),
+    ]);
+}
+
+function admin_categoria_adicionar(): void
+{
+    require_admin();
+    verify_csrf();
+
+    $label = trim($_POST['label'] ?? '');
+    $slug  = trim($_POST['slug']  ?? '');
+
+    // Gera slug automaticamente a partir do rótulo se não foi informado
+    if ($slug === '' && $label !== '') {
+        $slug = preg_replace('/[^a-z0-9]+/', '_', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $label)));
+        $slug = trim($slug, '_');
+    }
+
+    if ($label === '' || $slug === '') {
+        flash('Preencha o nome da categoria.', 'error');
+        redirect('/admin/categorias');
+    }
+
+    $cats = get_categories();
+
+    if (isset($cats[$slug])) {
+        flash('Já existe uma categoria com esse identificador: ' . $slug, 'error');
+        redirect('/admin/categorias');
+    }
+
+    $cats[$slug] = $label;
+    save_categories($cats);
+
+    flash('Categoria "' . $label . '" adicionada.', 'success');
+    redirect('/admin/categorias');
+}
+
+function admin_categoria_renomear(string $slug): void
+{
+    require_admin();
+    verify_csrf();
+
+    $label = trim($_POST['label'] ?? '');
+    if ($label === '') {
+        flash('O nome não pode ficar em branco.', 'error');
+        redirect('/admin/categorias');
+    }
+
+    $cats = get_categories();
+    if (!isset($cats[$slug])) {
+        flash('Categoria não encontrada.', 'error');
+        redirect('/admin/categorias');
+    }
+
+    $cats[$slug] = $label;
+    save_categories($cats);
+
+    flash('Categoria renomeada para "' . $label . '".', 'success');
+    redirect('/admin/categorias');
+}
+
+function admin_categoria_excluir(string $slug): void
+{
+    require_admin();
+    verify_csrf();
+
+    // Verifica se há produtos usando esta categoria
+    $stmt = db()->prepare('SELECT COUNT(*) FROM products WHERE category = ?');
+    $stmt->execute([$slug]);
+    $count = (int) $stmt->fetchColumn();
+
+    if ($count > 0) {
+        flash("Não é possível excluir: há {$count} produto(s) nesta categoria. Reatribua-os antes.", 'error');
+        redirect('/admin/categorias');
+    }
+
+    $cats = get_categories();
+    unset($cats[$slug]);
+    save_categories($cats);
+
+    flash('Categoria excluída.', 'success');
+    redirect('/admin/categorias');
 }
 
 // ----------------------------------------------------------------------

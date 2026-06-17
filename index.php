@@ -92,6 +92,12 @@ $rotas = [
     ['POST', '#^/admin/mensagens/marcar/(\d+)$#', 'admin_mensagem_marcar'],
     ['POST', '#^/admin/mensagens/excluir/(\d+)$#', 'admin_mensagem_excluir'],
 
+    // ---- Admin: categorias de produtos ------------------------------------
+    ['GET',  '#^/admin/categorias$#',                     'admin_categorias_page'],
+    ['POST', '#^/admin/categorias/adicionar$#',           'admin_categoria_adicionar'],
+    ['POST', '#^/admin/categorias/renomear/([^/]+)$#',   'admin_categoria_renomear'],
+    ['POST', '#^/admin/categorias/excluir/([^/]+)$#',    'admin_categoria_excluir'],
+
     // ---- Admin: ajuda -----------------------------------------------------
     ['GET', '#^/admin/ajuda$#', 'admin_ajuda_page'],
 ];

@@ -475,11 +475,39 @@ function lines_to_array(string $texto): array
 // ----------------------------------------------------------------------
 
 /**
+ * Retorna as categorias de produtos salvas no banco (site_content).
+ * Fallback para CATEGORY_LABELS do config.php se ainda não houver no banco.
+ *
+ * @return array<string,string>  chave => rótulo
+ */
+function get_categories(): array
+{
+    $json = get_content('product_categories', '');
+    if ($json !== '') {
+        $arr = json_decode($json, true);
+        if (is_array($arr) && count($arr) > 0) {
+            return $arr;
+        }
+    }
+    return defined('CATEGORY_LABELS') ? CATEGORY_LABELS : [];
+}
+
+/**
+ * Salva as categorias de volta no banco.
+ *
+ * @param array<string,string> $cats
+ */
+function save_categories(array $cats): void
+{
+    set_content('product_categories', json_encode($cats, JSON_UNESCAPED_UNICODE));
+}
+
+/**
  * Nome legível da categoria de produto.
  */
 function category_label(string $cat): string
 {
-    return CATEGORY_LABELS[$cat] ?? ucfirst($cat);
+    return get_categories()[$cat] ?? ucfirst($cat);
 }
 
 /**

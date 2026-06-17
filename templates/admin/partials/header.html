@@ -25,6 +25,7 @@
         Mensagens
         <?php if ($admMensagensNaoLidas > 0): ?><span class="badge-count"><?= $admMensagensNaoLidas ?></span><?php endif; ?>
       </a>
+      <a href="<?= url_for('/admin/categorias') ?>"<?= ($active ?? '') === 'categorias' ? ' class="active"' : '' ?>>Categorias</a>
       <a href="<?= url_for('/admin/senha') ?>"<?= ($active ?? '') === 'senha' ? ' class="active"' : '' ?>>Alterar senha</a>
       <a href="<?= url_for('/admin/ajuda') ?>"<?= ($active ?? '') === 'ajuda' ? ' class="active"' : '' ?>>Ajuda</a>
     </nav>

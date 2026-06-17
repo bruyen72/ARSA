@@ -1,0 +1,95 @@
+<?php $active = 'categorias'; include __DIR__ . '/partials/header.html'; ?>
+
+<div class="admin-card">
+  <p style="font-size:14px;color:var(--adm-muted);margin:0 0 20px;">
+    Gerencie as categorias de produtos do catálogo. Cada produto é vinculado a uma categoria.<br>
+    Não é possível excluir uma categoria que possua produtos — reatribua-os primeiro.
+  </p>
+
+  <?php if (empty($categories)): ?>
+  <p style="color:var(--adm-muted);font-size:14px;">Nenhuma categoria cadastrada ainda.</p>
+  <?php else: ?>
+  <table class="admin-table" style="margin-bottom:32px;">
+    <thead>
+      <tr>
+        <th>Identificador</th>
+        <th>Nome exibido</th>
+        <th style="width:260px;">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($categories as $slug => $label): ?>
+      <tr>
+        <td><code style="font-size:13px;background:var(--adm-bg);padding:2px 7px;border-radius:4px;"><?= h($slug) ?></code></td>
+        <td>
+          <!-- Renomear inline -->
+          <form method="post" action="<?= url_for('/admin/categorias/renomear/' . urlencode($slug)) ?>"
+                style="display:flex;gap:8px;align-items:center;">
+            <?= csrf_field() ?>
+            <input type="text" name="label" value="<?= h($label) ?>"
+                   style="flex:1;min-width:140px;padding:6px 10px;border:1px solid var(--adm-border);border-radius:6px;font-size:14px;"
+                   required>
+            <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="<?= url_for('/admin/categorias/excluir/' . urlencode($slug)) ?>"
+                onsubmit="return confirm('Excluir a categoria «<?= h(addslashes($label)) ?>»? Esta ação não pode ser desfeita.');">
+            <?= csrf_field() ?>
+            <button class="btn btn-danger btn-sm" type="submit">🗑 Excluir</button>
+          </form>
+        </td>
+      </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+  <?php endif; ?>
+
+  <hr style="border:none;border-top:1px solid var(--adm-border);margin:0 0 24px;">
+
+  <h2 style="font-size:15px;font-weight:700;margin:0 0 16px;">Adicionar nova categoria</h2>
+  <form method="post" action="<?= url_for('/admin/categorias/adicionar') ?>"
+        style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+    <?= csrf_field() ?>
+    <div class="field" style="flex:1;min-width:180px;margin:0;">
+      <label for="cat-label" style="font-size:13px;">Nome exibido *</label>
+      <input id="cat-label" type="text" name="label" placeholder="Ex.: Base Fixa" required
+             oninput="autoSlug(this)" style="width:100%;">
+    </div>
+    <div class="field" style="flex:1;min-width:160px;margin:0;">
+      <label for="cat-slug" style="font-size:13px;">
+        Identificador interno
+        <span style="font-weight:400;color:var(--adm-muted);">(gerado automaticamente)</span>
+      </label>
+      <input id="cat-slug" type="text" name="slug" placeholder="Ex.: base_fixa"
+             pattern="[a-z0-9_]+" title="Apenas letras minúsculas, números e _" style="width:100%;">
+    </div>
+    <button class="btn btn-primary" type="submit" style="white-space:nowrap;">+ Adicionar</button>
+  </form>
+  <p style="font-size:12px;color:var(--adm-muted);margin:10px 0 0;">
+    O identificador é gerado automaticamente a partir do nome. Você pode editá-lo livremente —
+    use apenas letras minúsculas, números e sublinhado (_).
+  </p>
+</div>
+
+<script>
+function autoSlug(input) {
+  var label = input.value;
+  // Transliterate common accented chars
+  var map = {
+    'á':'a','à':'a','ã':'a','â':'a','ä':'a',
+    'é':'e','è':'e','ê':'e','ë':'e',
+    'í':'i','ì':'i','î':'i','ï':'i',
+    'ó':'o','ò':'o','õ':'o','ô':'o','ö':'o',
+    'ú':'u','ù':'u','û':'u','ü':'u',
+    'ç':'c','ñ':'n'
+  };
+  var slug = label.toLowerCase()
+    .replace(/[áàãâäéèêëíìîïóòõôöúùûüçñ]/g, function(c){ return map[c] || c; })
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  document.getElementById('cat-slug').value = slug;
+}
+</script>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

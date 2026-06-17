@@ -19,9 +19,9 @@ function home_page(): void
 function produtos_page(): void
 {
     $categoria = $_GET['category'] ?? 'todos';
-    $categorias = array_merge(['todos' => 'Todos os produtos'], CATEGORY_LABELS);
+    $categorias = array_merge(['todos' => 'Todos os produtos'], get_categories());
 
-    if ($categoria !== 'todos' && !isset(CATEGORY_LABELS[$categoria])) {
+    if ($categoria !== 'todos' && !isset(get_categories()[$categoria])) {
         $categoria = 'todos';
     }
 

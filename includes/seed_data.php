@@ -92,5 +92,12 @@ function seed_content(): array
         // Rodapé
         'footer_copyright' => '© 2026 ARSA Radiocomunicação. Todos os direitos reservados.',
         'footer_location' => 'Cuiabá — Mato Grosso',
+
+        // Categorias de produtos (JSON — gerenciadas em /admin/categorias)
+        'product_categories' => json_encode([
+            'portatil'   => 'Rádio Portátil',
+            'movel'      => 'Rádio Móvel',
+            'repetidora' => 'Repetidora',
+        ], JSON_UNESCAPED_UNICODE),
     ];
 }
