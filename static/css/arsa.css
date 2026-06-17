@@ -935,27 +935,87 @@ body[data-theme="vibrante"] .site-footer {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  margin-top: 4px;
 }
 .specs-card .specs-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 16px;
-  padding: 16px 22px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  padding: 13px 20px;
   border-bottom: 1px solid var(--line);
-  background: #f4f9fd;
+  background: #f0f6fc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.specs-table { width: 100%; border-collapse: collapse; font-size: 15px; }
-.specs-table th, .specs-table td { text-align: left; padding: 13px 22px; }
-.specs-table th { font-weight: 600; color: var(--ink-soft); width: 44%; white-space: nowrap; }
-.specs-table tr + tr th, .specs-table tr + tr td { border-top: 1px solid var(--line); }
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  table-layout: fixed;
+}
+.specs-table th {
+  width: 42%;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink-soft);
+  background: #fafbfd;
+  padding: 12px 18px;
+  text-align: left;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.specs-table td {
+  padding: 12px 18px;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: left;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.specs-table tr.specs-even th { background: #eef5fb; }
+.specs-table tr.specs-even td { background: #f6f9fc; }
+.specs-table tr + tr th,
+.specs-table tr + tr td { border-top: 1px solid var(--line); }
+.aviso-specs {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  padding: 10px 18px;
+  background: #fafbfd;
+  border-top: 1px solid var(--line);
+  line-height: 1.5;
+}
+.aviso-specs svg { flex-shrink: 0; margin-top: 1px; opacity: .7; }
+.btn-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff8f8;
+  border: 1.5px solid #e53e3e;
+  color: #c53030;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 22px;
+  border-radius: 10px;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.btn-pdf:hover {
+  background: #ffe4e4;
+  border-color: #c53030;
+  color: #9b2c2c;
+}
+.btn-pdf svg { flex-shrink: 0; }
 .section-title-sm {
   font-size: 24px;
   margin-bottom: 28px;
-}
-.aviso-specs {
-  font-size: 13px;
-  color: var(--ink-soft);
-  margin-top: 12px;
 }
 body[data-theme="vibrante"] .detail-photo,
 body[data-theme="vibrante"] .specs-card {

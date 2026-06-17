@@ -187,23 +187,30 @@ include __DIR__ . '/partials/header.html';
 
           <?php if (!empty($product['specs'])): ?>
           <div class="specs-card">
-            <div class="specs-title">Ficha técnica</div>
+            <div class="specs-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+              Especificações técnicas
+            </div>
             <table class="specs-table">
-              <?php foreach ($product['specs'] as $chave => $valor): ?>
-                <tr>
+              <?php $i = 0; foreach ($product['specs'] as $chave => $valor): $i++; ?>
+                <tr class="<?= $i % 2 === 0 ? 'specs-even' : '' ?>">
                   <th><?= h($chave) ?></th>
                   <td><?= h($valor) ?></td>
                 </tr>
               <?php endforeach; ?>
             </table>
-            <p class="aviso-specs">Os dados podem variar conforme a versão do equipamento. Confirme com a nossa equipe antes de fechar o pedido.</p>
+            <div class="aviso-specs">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Os dados podem variar conforme a versão do equipamento. Confirme com a nossa equipe antes de fechar o pedido.
+            </div>
           </div>
           <?php endif; ?>
 
           <?php if (!empty($product['pdf_path'])): ?>
-          <p style="margin-top: 18px;">
-            <a class="card-link" href="<?= h(upload_url($product['pdf_path'])) ?>" target="_blank" rel="noopener">Baixar ficha técnica em PDF</a>
-          </p>
+          <a class="btn-pdf" href="<?= h(upload_url($product['pdf_path'])) ?>" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>
+            Baixar ficha técnica em PDF
+          </a>
           <?php endif; ?>
         </div>
       </div>

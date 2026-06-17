@@ -66,57 +66,62 @@ include __DIR__ . '/partials/header.html';
     </div>
 
     <fieldset class="admin-fieldset">
-      <legend>Imagem principal</legend>
+      <legend>📷 Imagem principal</legend>
+      <p class="admin-upload-hint">Esta é a foto que aparece no card da lista de produtos e como foto principal na página do produto. Use imagem com fundo branco ou transparente para melhor resultado.</p>
       <?php $foto = media_url($product['image_path'] ?? null); ?>
       <?php if ($foto): ?>
       <div class="upload-current">
-        <img src="<?= h($foto) ?>" alt="">
+        <img src="<?= h($foto) ?>" alt="Imagem atual" style="max-height:180px; object-fit:contain; border-radius:8px; background:#f4f6fa; padding:8px;">
         <?php if ($isEdit): ?>
-        <button class="btn btn-danger btn-sm" type="submit" formaction="<?= url_for('/admin/produtos/excluir-imagem/' . $product['id']) ?>" onclick="return confirm('Remover a imagem principal?');">Remover imagem</button>
+        <button class="btn btn-danger btn-sm" type="submit" formaction="<?= url_for('/admin/produtos/excluir-imagem/' . $product['id']) ?>" onclick="return confirm('Remover a imagem principal?');">🗑 Remover imagem atual</button>
         <?php endif; ?>
       </div>
       <?php endif; ?>
       <div class="field">
-        <label for="in-imagem">Enviar <?= $foto ? 'nova' : '' ?> imagem (jpg, png ou webp)</label>
-        <input id="in-imagem" name="imagem" type="file" accept=".jpg,.jpeg,.png,.webp">
+        <label for="in-imagem"><?= $foto ? '🔄 Substituir imagem principal' : '📤 Enviar imagem principal' ?> <span style="font-weight:400;color:var(--adm-muted);">(jpg, png ou webp)</span></label>
+        <input id="in-imagem" name="imagem" type="file" accept=".jpg,.jpeg,.png,.webp" onchange="previewUpload(this, 'prev-main')">
+        <div id="prev-main" class="upload-preview" style="display:none;"></div>
       </div>
     </fieldset>
 
     <fieldset class="admin-fieldset">
-      <legend>Galeria de imagens</legend>
+      <legend>🖼 Galeria de fotos adicionais</legend>
+      <p class="admin-upload-hint">Fotos extras do produto (ângulos diferentes, acessórios, etc.). Aparecem como miniaturas clicáveis na página do produto. <strong>Não repita a imagem principal aqui.</strong></p>
       <?php if (!empty($product['image_paths'])): ?>
       <div class="gallery-grid">
         <?php foreach ($product['image_paths'] as $i => $img): $imgUrl = media_url($img); ?>
         <div class="gallery-item">
-          <img src="<?= h($imgUrl) ?>" alt="">
+          <img src="<?= h($imgUrl) ?>" alt="Foto <?= $i + 1 ?>">
           <?php if ($isEdit): ?>
-          <button class="btn btn-danger btn-sm" type="submit" style="width:100%;" formaction="<?= url_for('/admin/produtos/excluir-imagem-adicional/' . $product['id'] . '/' . $i) ?>" onclick="return confirm('Remover esta imagem da galeria?');">Remover</button>
+          <button class="btn btn-danger btn-sm" type="submit" style="width:100%;margin-top:6px;" formaction="<?= url_for('/admin/produtos/excluir-imagem-adicional/' . $product['id'] . '/' . $i) ?>" onclick="return confirm('Remover esta foto da galeria?');">🗑 Remover</button>
           <?php endif; ?>
         </div>
         <?php endforeach; ?>
       </div>
       <?php endif; ?>
-      <div class="field">
-        <label for="in-galeria">Adicionar imagens à galeria (pode selecionar várias)</label>
-        <input id="in-galeria" name="galeria[]" type="file" accept=".jpg,.jpeg,.png,.webp" multiple>
+      <div class="field" style="margin-top:12px;">
+        <label for="in-galeria">📤 Adicionar fotos à galeria <span style="font-weight:400;color:var(--adm-muted);">(selecione uma ou várias)</span></label>
+        <input id="in-galeria" name="galeria[]" type="file" accept=".jpg,.jpeg,.png,.webp" multiple onchange="previewGallery(this, 'prev-gallery')">
+        <div id="prev-gallery" class="upload-preview-gallery" style="display:none;"></div>
       </div>
     </fieldset>
 
     <fieldset class="admin-fieldset">
-      <legend>Ficha técnica (PDF)</legend>
+      <legend>📄 Ficha técnica em PDF</legend>
+      <p class="admin-upload-hint">Arquivo PDF que o cliente pode baixar. Aparece como botão vermelho "Baixar ficha técnica em PDF" na página do produto.</p>
       <?php if (!empty($product['pdf_path'])): $pdfUrl = upload_url($product['pdf_path']); ?>
-      <div class="upload-current">
-        <span class="file-pill">PDF</span>
+      <div class="upload-current" style="align-items:center;gap:12px;">
+        <span class="file-pill" style="font-size:13px;padding:6px 14px;">📄 PDF atual</span>
         <div class="upload-actions">
-          <a class="btn btn-ghost btn-sm" href="<?= h($pdfUrl) ?>" target="_blank" rel="noopener">Ver PDF atual</a>
+          <a class="btn btn-ghost btn-sm" href="<?= h($pdfUrl) ?>" target="_blank" rel="noopener">👁 Visualizar PDF</a>
           <?php if ($isEdit): ?>
-          <button class="btn btn-danger btn-sm" type="submit" formaction="<?= url_for('/admin/produtos/excluir-pdf/' . $product['id']) ?>" onclick="return confirm('Remover o PDF da ficha técnica?');">Remover PDF</button>
+          <button class="btn btn-danger btn-sm" type="submit" formaction="<?= url_for('/admin/produtos/excluir-pdf/' . $product['id']) ?>" onclick="return confirm('Remover o PDF da ficha técnica?');">🗑 Remover PDF</button>
           <?php endif; ?>
         </div>
       </div>
       <?php endif; ?>
-      <div class="field">
-        <label for="in-pdf">Enviar <?= !empty($product['pdf_path']) ? 'novo' : '' ?> PDF</label>
+      <div class="field" style="margin-top:12px;">
+        <label for="in-pdf"><?= !empty($product['pdf_path']) ? '🔄 Substituir PDF' : '📤 Enviar PDF da ficha técnica' ?></label>
         <input id="in-pdf" name="pdf" type="file" accept=".pdf">
       </div>
     </fieldset>
@@ -127,6 +132,105 @@ include __DIR__ . '/partials/header.html';
     </div>
   </form>
 </div>
+
+<style>
+.admin-upload-hint {
+  font-size: 13px;
+  color: var(--adm-muted);
+  margin: 0 0 14px;
+  line-height: 1.55;
+  background: var(--adm-bg);
+  border-left: 3px solid var(--adm-border);
+  padding: 8px 12px;
+  border-radius: 0 6px 6px 0;
+}
+.upload-preview {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--adm-bg);
+  border: 1px dashed var(--adm-border);
+  border-radius: 8px;
+}
+.upload-preview img {
+  height: 120px;
+  max-width: 160px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid var(--adm-border);
+}
+.upload-preview-gallery {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--adm-bg);
+  border: 1px dashed var(--adm-border);
+  border-radius: 8px;
+}
+.upload-preview-gallery img {
+  height: 90px;
+  width: 90px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--adm-border);
+}
+.preview-label {
+  font-size: 12px;
+  color: var(--adm-muted);
+  margin-bottom: 6px;
+  display: block;
+}
+</style>
+
+<script>
+  function previewUpload(input, targetId) {
+    var target = document.getElementById(targetId);
+    target.innerHTML = '';
+    if (!input.files || !input.files[0]) { target.style.display = 'none'; return; }
+    var label = document.createElement('span');
+    label.className = 'preview-label';
+    label.textContent = 'Pré-visualização da imagem selecionada:';
+    target.appendChild(label);
+    var file = input.files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = document.createElement('img');
+      img.src = e.target.result;
+      target.appendChild(img);
+      target.style.display = 'flex';
+      target.style.flexDirection = 'column';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function previewGallery(input, targetId) {
+    var target = document.getElementById(targetId);
+    target.innerHTML = '';
+    if (!input.files || !input.files.length) { target.style.display = 'none'; return; }
+    var label = document.createElement('span');
+    label.className = 'preview-label';
+    label.textContent = input.files.length + ' foto(s) selecionada(s) — pré-visualização:';
+    target.appendChild(label);
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;';
+    Array.from(input.files).forEach(function(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        row.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+    target.appendChild(row);
+    target.style.display = 'block';
+  }
+</script>
 
 <script>
   (function () {
