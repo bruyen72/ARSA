@@ -843,49 +843,92 @@ body[data-theme="vibrante"] .site-footer {
   padding: 60px 0;
 }
 
-/* ── Grade de marcas ────────────────────────────────────── */
+/* ── Grade de marcas (página /produtos) ─────────────────── */
 .brand-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
+  margin-top: 40px;
 }
-.brand-card {
+
+.brand-tile {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 36px 32px;
-  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
+  border-radius: 20px;
   text-decoration: none;
   color: inherit;
+  background: var(--surface);
+  box-shadow: 0 2px 12px rgba(10,39,64,.07), 0 1px 0 rgba(10,39,64,.04);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
-.brand-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(27, 143, 217, 0.4);
+.brand-tile:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 52px rgba(10,39,64,.15);
+  border-color: rgba(27, 143, 217, 0.5);
 }
-.brand-logo-wrap {
-  height: 52px;
-  overflow: hidden;
+
+.brand-tile-top {
+  background: linear-gradient(145deg, rgba(27,143,217,.07) 0%, rgba(10,39,64,.03) 100%);
   display: flex;
   align-items: center;
-  flex-shrink: 0;
+  justify-content: center;
+  padding: 40px 32px 32px;
+  border-bottom: 1px solid var(--line);
+  min-height: 140px;
 }
-.brand-logo-wrap img {
+.brand-tile-logo {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.brand-tile-logo img {
   display: block;
-  height: 44px;
+  height: 64px;
   width: auto;
-  max-width: 150px;
+  max-width: 200px;
   object-fit: contain;
-  flex-shrink: 0;
 }
-.brand-card h3 { font-size: 21px; color: var(--ink); }
-.brand-card > p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; flex: 1; }
-.brand-link { font-weight: 700; color: var(--accent); font-size: 14.5px; }
+
+.brand-tile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 28px 28px;
+  flex: 1;
+}
+.brand-tile-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  font-family: var(--font-display);
+  margin: 0;
+  line-height: 1.2;
+}
+.brand-tile-desc {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0;
+  flex: 1;
+}
+.brand-tile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: .01em;
+  transition: gap .18s ease, color .18s ease;
+}
+.brand-tile:hover .brand-tile-btn {
+  gap: 12px;
+  color: var(--accent-deep);
+}
 
 /* ── Página interna de marca ────────────────────────────── */
 .brand-breadcrumb {
@@ -934,6 +977,9 @@ body[data-theme="vibrante"] .site-footer {
 
 @media (max-width: 700px) {
   .brand-grid { grid-template-columns: 1fr; }
+  .brand-tile-top { padding: 28px 20px 24px; min-height: 110px; }
+  .brand-tile-logo { height: 56px; }
+  .brand-tile-logo img { height: 50px; max-width: 160px; }
   .brand-header { grid-template-columns: 1fr; }
   .brand-header-logo { width: 120px; height: 56px; }
 }

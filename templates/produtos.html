@@ -26,13 +26,17 @@ include __DIR__ . '/partials/header.html';
       </div>
       <div class="brand-grid">
         <?php foreach ($marcas as $key => $marca): ?>
-        <a class="brand-card rv" href="<?= url_for('/produtos') . '?marca=' . urlencode($key) ?>">
-          <div class="brand-logo-wrap">
-            <img src="<?= url_for($marca['logo']) ?>" alt="<?= h($marca['label']) ?>">
+        <a class="brand-tile" href="<?= url_for('/produtos') . '?marca=' . urlencode($key) ?>">
+          <div class="brand-tile-top">
+            <div class="brand-tile-logo">
+              <img src="<?= url_for($marca['logo']) ?>" alt="<?= h($marca['label']) ?>">
+            </div>
           </div>
-          <h3><?= h($marca['label']) ?></h3>
-          <p><?= h($marca['descricao']) ?></p>
-          <span class="brand-link">Ver produtos →</span>
+          <div class="brand-tile-body">
+            <p class="brand-tile-name"><?= h($marca['label']) ?></p>
+            <p class="brand-tile-desc"><?= h($marca['descricao']) ?></p>
+            <span class="brand-tile-btn">Ver produtos <span aria-hidden="true">→</span></span>
+          </div>
         </a>
         <?php endforeach; ?>
       </div>
