@@ -201,6 +201,8 @@ function sync_brands(PDO $pdo): void
 {
     $count = (int) $pdo->query('SELECT COUNT(*) FROM brands')->fetchColumn();
     if ($count > 0) {
+        // Migração de descrições: atualiza apenas se ainda tem o texto antigo
+        $pdo->exec("UPDATE brands SET description = 'A Caltta é uma das líderes globais em soluções de radiocomunicação profissional, oferecendo tecnologias 2G, 4G, 5G e PoC, além de equipamentos e sistemas desenvolvidos para operações que exigem comunicação segura, rápida e eficiente.' WHERE slug = 'caltta' AND description LIKE 'Solução PoC%'");
         return;
     }
 
@@ -216,7 +218,7 @@ function sync_brands(PDO $pdo): void
         'Marca nacional com excelente custo-benefício e suporte técnico em todo o Brasil. Ideal para empresas que buscam confiabilidade com investimento acessível.',
         'intelbras', 2]);
     $stmt->execute(['Caltta', 'caltta', '/static/img/brands/caltta.png',
-        'Solução PoC (Push-to-Talk over Cellular) que opera via rede celular e internet, eliminando barreiras de distância e cobertura. Perfeito para operações em área ampla.',
+        'A Caltta é uma das líderes globais em soluções de radiocomunicação profissional, oferecendo tecnologias 2G, 4G, 5G e PoC, além de equipamentos e sistemas desenvolvidos para operações que exigem comunicação segura, rápida e eficiente.',
         'caltta', 3]);
     $stmt->execute(['Motorola Solutions', 'motorola', '/static/img/brands/motorola-solutions.svg',
         'Líder mundial em radiocomunicação com décadas de inovação. Equipamentos robustos, confiáveis e com ecossistema completo de acessórios e suporte.',
