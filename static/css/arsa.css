@@ -860,6 +860,7 @@ body[data-theme="vibrante"] .site-footer {
   box-shadow: var(--shadow-sm);
   text-decoration: none;
   color: inherit;
+  overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 .brand-card:hover {
@@ -868,14 +869,19 @@ body[data-theme="vibrante"] .site-footer {
   border-color: rgba(27, 143, 217, 0.4);
 }
 .brand-logo-wrap {
-  height: 56px;
+  height: 52px;
+  overflow: hidden;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 .brand-logo-wrap img {
-  max-height: 100%;
-  max-width: 160px;
+  display: block;
+  height: 44px;
+  width: auto;
+  max-width: 150px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 .brand-card h3 { font-size: 21px; color: var(--ink); }
 .brand-card > p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; flex: 1; }
