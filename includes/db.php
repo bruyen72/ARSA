@@ -110,6 +110,19 @@ function init_schema(PDO $pdo): void
         )
     ");
 
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS brands (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            slug TEXT NOT NULL UNIQUE,
+            logo_path TEXT,
+            description TEXT,
+            search_term TEXT NOT NULL DEFAULT '',
+            sort_order INTEGER DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ");
+
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_products_category_created ON products (category, created_at)");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_products_created ON products (created_at)");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_services_created ON services (created_at)");
@@ -117,6 +130,7 @@ function init_schema(PDO $pdo): void
 
     seed_if_empty($pdo);
     sync_services($pdo);
+    sync_brands($pdo);
 }
 
 /**
@@ -178,6 +192,35 @@ function sync_services(PDO $pdo): void
         $pdo->prepare("UPDATE services SET {$col} = :new WHERE {$col} = :old")
             ->execute([':new' => $m['new'], ':old' => $m['old']]);
     }
+}
+
+/**
+ * Garante que as marcas iniciais existem no banco (idempotente).
+ */
+function sync_brands(PDO $pdo): void
+{
+    $count = (int) $pdo->query('SELECT COUNT(*) FROM brands')->fetchColumn();
+    if ($count > 0) {
+        return;
+    }
+
+    $stmt = $pdo->prepare('
+        INSERT INTO brands (name, slug, logo_path, description, search_term, sort_order)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ');
+
+    $stmt->execute(['Hytera', 'hytera', '/static/img/brands/hytera.svg',
+        'Tecnologia DMR de alta performance para comunicação corporativa e industrial. Referência global em rádios digitais com criptografia, alta durabilidade e longa vida de bateria.',
+        'hytera', 1]);
+    $stmt->execute(['Intelbras', 'intelbras', '/static/img/brands/intelbras.svg',
+        'Marca nacional com excelente custo-benefício e suporte técnico em todo o Brasil. Ideal para empresas que buscam confiabilidade com investimento acessível.',
+        'intelbras', 2]);
+    $stmt->execute(['Caltta', 'caltta', '/static/img/brands/caltta.png',
+        'Solução PoC (Push-to-Talk over Cellular) que opera via rede celular e internet, eliminando barreiras de distância e cobertura. Perfeito para operações em área ampla.',
+        'caltta', 3]);
+    $stmt->execute(['Motorola Solutions', 'motorola', '/static/img/brands/motorola-solutions.svg',
+        'Líder mundial em radiocomunicação com décadas de inovação. Equipamentos robustos, confiáveis e com ecossistema completo de acessórios e suporte.',
+        'motorola', 4]);
 }
 
 /**

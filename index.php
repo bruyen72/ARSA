@@ -98,6 +98,14 @@ $rotas = [
     ['POST', '#^/admin/categorias/renomear/([^/]+)$#',   'admin_categoria_renomear'],
     ['POST', '#^/admin/categorias/excluir/([^/]+)$#',    'admin_categoria_excluir'],
 
+    // ---- Admin: marcas ---------------------------------------------------
+    ['GET',  '#^/admin/marcas$#',                  'admin_marcas_page'],
+    ['GET',  '#^/admin/marcas/adicionar$#',        'admin_marca_form'],
+    ['POST', '#^/admin/marcas/adicionar$#',        'admin_marca_create'],
+    ['GET',  '#^/admin/marcas/editar/(\d+)$#',     'admin_marca_form'],
+    ['POST', '#^/admin/marcas/editar/(\d+)$#',     'admin_marca_update'],
+    ['POST', '#^/admin/marcas/excluir/(\d+)$#',    'admin_marca_delete'],
+
     // ---- Admin: ajuda -----------------------------------------------------
     ['GET', '#^/admin/ajuda$#', 'admin_ajuda_page'],
 ];

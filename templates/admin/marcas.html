@@ -1,0 +1,77 @@
+<?php
+$active = 'marcas';
+$topbar_actions = '<a class="btn btn-primary btn-sm" href="' . url_for('/admin/marcas/adicionar') . '">+ Nova marca</a>';
+include __DIR__ . '/partials/header.html';
+?>
+
+<div class="admin-card">
+  <div class="admin-card-head">
+    <div>
+      <h2>Marcas</h2>
+      <p class="card-desc">Marcas exibidas na página /produtos. A ordem controla a sequência nos cards.</p>
+    </div>
+    <a class="btn btn-primary btn-sm" href="<?= url_for('/admin/marcas/adicionar') ?>">+ Nova marca</a>
+  </div>
+
+  <?php if (empty($marcas)): ?>
+  <p class="card-desc">Nenhuma marca cadastrada.</p>
+  <?php else: ?>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th style="width:60px">Logo</th>
+          <th>Nome</th>
+          <th>Slug</th>
+          <th>Busca por</th>
+          <th style="width:60px;text-align:center">Ordem</th>
+          <th style="width:80px;text-align:center">Produtos</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($marcas as $m): ?>
+        <tr>
+          <td>
+            <?php if (!empty($m['logo_path'])): ?>
+              <img class="thumb" src="<?= url_for(h($m['logo_path'])) ?>" alt="<?= h($m['name']) ?>"
+                   style="object-fit:contain;background:#f5f7fa;padding:4px;">
+            <?php else: ?>
+              <span class="thumb" style="display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:11px;">sem logo</span>
+            <?php endif; ?>
+          </td>
+          <td style="font-weight:600"><?= h($m['name']) ?></td>
+          <td><code><?= h($m['slug']) ?></code></td>
+          <td><code><?= h($m['search_term']) ?></code></td>
+          <td style="text-align:center"><?= (int) $m['sort_order'] ?></td>
+          <td style="text-align:center">
+            <a href="<?= url_for('/produtos?marca=' . urlencode($m['slug'])) ?>" target="_blank"
+               style="font-weight:600;color:var(--accent)"><?= (int) $m['total_produtos'] ?></a>
+          </td>
+          <td>
+            <div class="row-actions">
+              <a class="btn btn-ghost btn-sm" href="<?= url_for('/admin/marcas/editar/' . $m['id']) ?>">Editar</a>
+              <form method="post" action="<?= url_for('/admin/marcas/excluir/' . $m['id']) ?>"
+                    onsubmit="return confirm('Excluir a marca «<?= h($m['name']) ?>»? Isso não exclui os produtos.');">
+                <?= csrf_field() ?>
+                <button class="btn btn-danger btn-sm" type="submit">Excluir</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+  <?php endif; ?>
+</div>
+
+<div class="admin-card" style="background:var(--bg);border-color:var(--line);">
+  <p class="card-desc" style="margin:0;">
+    💡 <strong>Como funciona:</strong> cada produto cadastrado tem um campo <em>Marca</em> (ex: "Hytera").
+    O campo <em>Busca por</em> da marca é usado para encontrar esses produtos automaticamente (busca parcial no nome da marca).
+    Exemplo: busca <code>hytera</code> encontra produtos com marca "Hytera", "Hytera DMR", etc.
+  </p>
+</div>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

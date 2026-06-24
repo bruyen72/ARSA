@@ -18,33 +18,18 @@ function home_page(): void
 
 function produtos_page(): void
 {
-    // Definição das marcas com logo, descrição e padrão de busca no banco
-    $marcas = [
-        'hytera' => [
-            'label'    => 'Hytera',
-            'logo'     => '/static/img/brands/hytera.svg',
-            'search'   => 'hytera',
-            'descricao'=> 'Tecnologia DMR de alta performance para comunicação corporativa e industrial. Referência global em rádios digitais com criptografia, alta durabilidade e longa vida de bateria.',
-        ],
-        'intelbras' => [
-            'label'    => 'Intelbras',
-            'logo'     => '/static/img/brands/intelbras.svg',
-            'search'   => 'intelbras',
-            'descricao'=> 'Marca nacional com excelente custo-benefício e suporte técnico em todo o Brasil. Ideal para empresas que buscam confiabilidade com investimento acessível.',
-        ],
-        'caltta' => [
-            'label'    => 'Caltta',
-            'logo'     => '/static/img/brands/caltta.png',
-            'search'   => 'caltta',
-            'descricao'=> 'Solução PoC (Push-to-Talk over Cellular) que opera via rede celular e internet, eliminando barreiras de distância e cobertura. Perfeito para operações em área ampla.',
-        ],
-        'motorola' => [
-            'label'    => 'Motorola Solutions',
-            'logo'     => '/static/img/brands/motorola-solutions.svg',
-            'search'   => 'motorola',
-            'descricao'=> 'Líder mundial em radiocomunicação com décadas de inovação. Equipamentos robustos, confiáveis e com ecossistema completo de acessórios e suporte.',
-        ],
-    ];
+    // Carrega marcas do banco (gerenciadas pelo admin em /admin/marcas)
+    $rows = db()->query('SELECT * FROM brands ORDER BY sort_order ASC, id ASC')->fetchAll();
+    $marcas = [];
+    foreach ($rows as $r) {
+        $marcas[$r['slug']] = [
+            'id'        => (int) $r['id'],
+            'label'     => $r['name'],
+            'logo'      => $r['logo_path'],
+            'descricao' => $r['description'],
+            'search'    => $r['search_term'],
+        ];
+    }
 
     $marca_key  = isset($_GET['marca']) && isset($marcas[$_GET['marca']]) ? $_GET['marca'] : null;
     $categoria  = $_GET['category'] ?? 'todos';

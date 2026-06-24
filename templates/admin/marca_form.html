@@ -1,0 +1,124 @@
+<?php
+$active = 'marcas';
+$isEdit = $marca['id'] !== null;
+$actionUrl = $isEdit
+    ? url_for('/admin/marcas/editar/' . $marca['id'])
+    : url_for('/admin/marcas/adicionar');
+$topbar_actions = '<a class="btn btn-ghost btn-sm" href="' . url_for('/admin/marcas') . '">← Voltar às marcas</a>';
+include __DIR__ . '/partials/header.html';
+?>
+
+<div class="admin-card">
+  <form class="form-grid" method="post" action="<?= $actionUrl ?>" enctype="multipart/form-data">
+    <?= csrf_field() ?>
+
+    <div class="form-row-2">
+      <div class="field">
+        <label for="in-name">Nome da marca *</label>
+        <input id="in-name" name="name" type="text"
+               value="<?= h($marca['name']) ?>"
+               placeholder="Ex.: Hytera, Motorola Solutions…"
+               required
+               oninput="autoSlug(this.value)">
+      </div>
+      <div class="field">
+        <label for="in-slug">
+          Identificador (slug) *
+          <span class="hint" style="display:inline;font-size:12px;">— usado na URL: /produtos?marca=<strong id="slug-preview"><?= h($marca['slug']) ?></strong></span>
+        </label>
+        <input id="in-slug" name="slug" type="text"
+               value="<?= h($marca['slug']) ?>"
+               placeholder="Ex.: hytera, motorola"
+               pattern="[a-z0-9\-]+"
+               title="Somente letras minúsculas, números e hífens"
+               required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="in-description">Descrição da marca</label>
+      <textarea id="in-description" name="description" rows="3"
+                placeholder="Texto exibido no card e na página interna da marca."><?= h($marca['description'] ?? '') ?></textarea>
+    </div>
+
+    <div class="form-row-2">
+      <div class="field">
+        <label for="in-search">
+          Busca por (search term) *
+          <span class="hint" style="display:inline;font-size:12px;">— palavra usada para encontrar produtos desta marca no banco</span>
+        </label>
+        <input id="in-search" name="search_term" type="text"
+               value="<?= h($marca['search_term'] ?? $marca['slug']) ?>"
+               placeholder="Ex.: hytera"
+               required>
+        <span class="hint">Busca parcial no campo Marca dos produtos. Ex.: "hytera" encontra "Hytera", "Hytera DMR 900", etc.</span>
+      </div>
+      <div class="field">
+        <label for="in-order">Ordem de exibição</label>
+        <input id="in-order" name="sort_order" type="number" min="0" max="999"
+               value="<?= (int) ($marca['sort_order'] ?? 0) ?>"
+               style="max-width:100px;">
+        <span class="hint">Número menor = aparece primeiro.</span>
+      </div>
+    </div>
+
+    <fieldset class="admin-fieldset">
+      <legend>Logo da marca</legend>
+
+      <?php if (!empty($marca['logo_path'])): ?>
+      <div class="upload-current" style="background:#f5f7fa;padding:16px;border-radius:10px;display:inline-flex;align-items:center;gap:16px;margin-bottom:12px;">
+        <img src="<?= url_for(h($marca['logo_path'])) ?>" alt="Logo atual"
+             style="height:52px;width:auto;max-width:180px;object-fit:contain;">
+        <span class="card-desc">Logo atual</span>
+      </div>
+      <p class="card-desc">Envie uma nova imagem abaixo para substituir.</p>
+      <?php endif; ?>
+
+      <div class="field">
+        <label for="in-logo">Enviar logo (jpg, png, webp ou svg)</label>
+        <input id="in-logo" name="logo" type="file" accept=".jpg,.jpeg,.png,.webp,.svg">
+        <span class="hint">SVG recomendado para logos vetoriais. Tamanho máximo: 2 MB.</span>
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">
+        <?= $isEdit ? 'Salvar alterações' : 'Cadastrar marca' ?>
+      </button>
+      <a class="btn btn-ghost" href="<?= url_for('/admin/marcas') ?>">Cancelar</a>
+      <?php if ($isEdit): ?>
+      <a class="btn btn-ghost" href="<?= url_for('/produtos?marca=' . urlencode($marca['slug'])) ?>" target="_blank" style="margin-left:auto;">
+        ↗ Ver no site
+      </a>
+      <?php endif; ?>
+    </div>
+  </form>
+</div>
+
+<script>
+function slugify(str) {
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9\s\-]/g, '')
+    .trim().replace(/\s+/g, '-');
+}
+var slugEdited = <?= $isEdit ? 'true' : 'false' ?>;
+function autoSlug(val) {
+  if (slugEdited) return;
+  var s = slugify(val);
+  document.getElementById('in-slug').value = s;
+  document.getElementById('slug-preview').textContent = s;
+  // auto-fill search_term too (only if empty)
+  var st = document.getElementById('in-search');
+  if (!st.dataset.touched) st.value = s;
+}
+document.getElementById('in-slug').addEventListener('input', function() {
+  slugEdited = true;
+  document.getElementById('slug-preview').textContent = this.value;
+});
+document.getElementById('in-search').addEventListener('input', function() {
+  this.dataset.touched = '1';
+});
+</script>
+
+<?php include __DIR__ . '/partials/footer.html'; ?>

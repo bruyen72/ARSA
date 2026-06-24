@@ -789,6 +789,134 @@ function admin_categoria_excluir(string $slug): void
 }
 
 // ----------------------------------------------------------------------
+// Marcas (CRUD)
+// ----------------------------------------------------------------------
+
+function admin_marcas_page(): void
+{
+    require_admin();
+
+    $marcas = db()->query("
+        SELECT b.*,
+               (SELECT COUNT(*) FROM products
+                WHERE LOWER(brand) LIKE LOWER('%' || b.search_term || '%')) AS total_produtos
+        FROM brands b
+        ORDER BY b.sort_order ASC, b.id ASC
+    ")->fetchAll();
+
+    echo render_template('admin/marcas.html', [
+        'title'  => 'Marcas',
+        'marcas' => $marcas,
+    ]);
+}
+
+function admin_marca_form(?string $id = null): void
+{
+    require_admin();
+
+    $marca = [
+        'id' => null, 'name' => '', 'slug' => '',
+        'logo_path' => '', 'description' => '',
+        'search_term' => '', 'sort_order' => 0,
+    ];
+
+    if ($id !== null) {
+        $stmt = db()->prepare('SELECT * FROM brands WHERE id = ?');
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            flash('Marca não encontrada.', 'error');
+            redirect('/admin/marcas');
+        }
+        $marca = $row;
+    }
+
+    echo render_template('admin/marca_form.html', [
+        'title' => $id !== null ? 'Editar marca' : 'Nova marca',
+        'marca' => $marca,
+    ]);
+}
+
+function admin_marca_create(): void
+{
+    require_admin();
+    verify_csrf();
+    save_marca(null);
+}
+
+function admin_marca_update(string $id): void
+{
+    require_admin();
+    verify_csrf();
+    save_marca($id);
+}
+
+function save_marca(?string $id): void
+{
+    $name        = trim($_POST['name'] ?? '');
+    $slug        = strtolower(trim($_POST['slug'] ?? ''));
+    $slug        = preg_replace('/[^a-z0-9\-]/', '', $slug);
+    $description = trim($_POST['description'] ?? '');
+    $search_term = trim($_POST['search_term'] ?? '') ?: $slug;
+    $sort_order  = (int) ($_POST['sort_order'] ?? 0);
+
+    $back = $id !== null ? "/admin/marcas/editar/{$id}" : '/admin/marcas/adicionar';
+
+    if ($name === '' || $slug === '') {
+        flash('Preencha o nome e o identificador (slug).', 'error');
+        redirect($back);
+    }
+
+    // Logo: aceita jpg/png/webp/svg
+    $logo_path = null;
+    if (!empty($_FILES['logo']['name'])) {
+        try {
+            $upload = handle_upload('logo', array_merge(ALLOWED_IMAGE_EXT, ['svg']), 'brands');
+            if ($upload) {
+                $logo_path = '/uploads/' . $upload['path'];
+            }
+        } catch (RuntimeException $e) {
+            flash($e->getMessage(), 'error');
+            redirect($back);
+        }
+    }
+
+    if ($id === null) {
+        $stmt = db()->prepare('
+            INSERT INTO brands (name, slug, logo_path, description, search_term, sort_order)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ');
+        $stmt->execute([$name, $slug, $logo_path, $description, $search_term, $sort_order]);
+        flash('Marca cadastrada com sucesso.', 'success');
+    } else {
+        $atual = db()->prepare('SELECT logo_path FROM brands WHERE id = ?');
+        $atual->execute([$id]);
+        $row = $atual->fetch();
+        $final_logo = $logo_path ?? ($row['logo_path'] ?? null);
+
+        $stmt = db()->prepare('
+            UPDATE brands SET name=?, slug=?, logo_path=?, description=?, search_term=?, sort_order=?
+            WHERE id=?
+        ');
+        $stmt->execute([$name, $slug, $final_logo, $description, $search_term, $sort_order, $id]);
+        flash('Marca atualizada com sucesso.', 'success');
+    }
+
+    redirect('/admin/marcas');
+}
+
+function admin_marca_delete(string $id): void
+{
+    require_admin();
+    verify_csrf();
+
+    $stmt = db()->prepare('DELETE FROM brands WHERE id = ?');
+    $stmt->execute([$id]);
+    flash('Marca excluída.', 'success');
+    redirect('/admin/marcas');
+}
+
+// ----------------------------------------------------------------------
 // Ajuda / tutorial do painel
 // ----------------------------------------------------------------------
 
