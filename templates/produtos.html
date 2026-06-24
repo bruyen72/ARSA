@@ -15,18 +15,70 @@ include __DIR__ . '/partials/header.html';
     </div>
   </section>
 
-  <!-- CATÁLOGO -->
-  <section class="section" data-screen-label="Catálogo">
+  <?php if (!$current_marca): ?>
+  <!-- GRADE DE MARCAS -->
+  <section class="section" data-screen-label="Marcas">
     <div class="wrap">
-      <div class="filter-row rv" id="filtros" role="tablist" aria-label="Filtrar por categoria">
-        <?php foreach ($categories as $key => $label): ?>
-          <a class="chip<?= $key === $current_category ? ' active' : '' ?>" role="tab" aria-selected="<?= $key === $current_category ? 'true' : 'false' ?>" href="<?= url_for('/produtos') . ($key === 'todos' ? '' : '?category=' . urlencode($key)) ?>"><?= h($label) ?></a>
+      <div class="section-head center rv">
+        <div class="kicker">Escolha a marca</div>
+        <h2>Selecione uma marca para explorar os produtos</h2>
+        <p>Trabalhamos com as principais marcas do mercado de radiocomunicação.</p>
+      </div>
+      <div class="brand-grid">
+        <?php foreach ($marcas as $key => $marca): ?>
+        <a class="brand-card rv" href="<?= url_for('/produtos') . '?marca=' . urlencode($key) ?>">
+          <div class="brand-logo-wrap">
+            <img src="<?= url_for($marca['logo']) ?>" alt="<?= h($marca['label']) ?>">
+          </div>
+          <h3><?= h($marca['label']) ?></h3>
+          <p><?= h($marca['descricao']) ?></p>
+          <span class="brand-link">Ver produtos →</span>
+        </a>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <?php else: ?>
+  <!-- PÁGINA DA MARCA SELECIONADA -->
+  <section class="section" data-screen-label="Catálogo por marca">
+    <div class="wrap">
+
+      <!-- Breadcrumb -->
+      <nav class="brand-breadcrumb rv" aria-label="Navegação">
+        <a href="<?= url_for('/produtos') ?>">← Todas as marcas</a>
+        <span><?= h($marca_info['label']) ?></span>
+      </nav>
+
+      <!-- Cabeçalho da marca -->
+      <div class="brand-header rv">
+        <div class="brand-header-logo">
+          <img src="<?= url_for($marca_info['logo']) ?>" alt="<?= h($marca_info['label']) ?>">
+        </div>
+        <div class="brand-header-text">
+          <h2><?= h($marca_info['label']) ?></h2>
+          <p><?= h($marca_info['descricao']) ?></p>
+        </div>
+      </div>
+
+      <!-- Filtro por tipo -->
+      <div class="filter-row rv" id="filtros" role="tablist" aria-label="Filtrar por tipo">
+        <a class="chip<?= $current_category === 'todos' ? ' active' : '' ?>" role="tab"
+           href="<?= url_for('/produtos') . '?marca=' . urlencode($current_marca) ?>">
+          Todos os produtos
+        </a>
+        <?php foreach (get_categories() as $key => $label): ?>
+          <a class="chip<?= $key === $current_category ? ' active' : '' ?>" role="tab"
+             href="<?= url_for('/produtos') . '?marca=' . urlencode($current_marca) . '&category=' . urlencode($key) ?>">
+            <?= h($label) ?>
+          </a>
         <?php endforeach; ?>
       </div>
 
+      <!-- Grid de produtos -->
       <div class="catalog-grid" id="catalogo">
         <?php if (empty($products)): ?>
-          <p style="grid-column: 1 / -1; color: var(--ink-soft);">Nenhum produto encontrado nesta categoria.</p>
+          <p style="grid-column: 1 / -1; color: var(--ink-soft);">Nenhum produto cadastrado nesta categoria ainda.</p>
         <?php endif; ?>
         <?php foreach ($products as $produto):
           $foto = media_url($produto['image_path'] ?? null);
@@ -42,14 +94,15 @@ include __DIR__ . '/partials/header.html';
           <div class="body">
             <span class="cat-tag"><?= h(category_label($produto['category'])) ?></span>
             <h3><?= h($produto['name']) ?></h3>
-            <p class="marca"><?= h($produto['brand'] ?? '') ?></p>
             <a class="ver" href="<?= url_for('/produto/' . $produto['id']) ?>">Ver produto</a>
           </div>
         </article>
         <?php endforeach; ?>
       </div>
+
     </div>
   </section>
+  <?php endif; ?>
 
   <!-- PLANOS DE LOCAÇÃO -->
   <section class="section" style="padding-top: 0;" data-screen-label="Locação">

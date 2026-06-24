@@ -35,7 +35,7 @@ function seed_services(): array
         [
             'name' => 'Rede planejada e dimensionada para máxima eficiência operacional.',
             'category' => 'Consultoria para licenciamento junto à ANATEL',
-            'description' => 'Analisamos sua operação, planejamos a cobertura e cuidamos da configuração e regularização da comunicação.',
+            'description' => 'Visitamos sua operação, analisamos as necessidades de comunicação, planejamos a cobertura, configuramos canais e repetidoras e acompanhamos a regularização necessária para uma operação segura, eficiente e sem interrupções.',
             'features' => [
                 'Visita técnica e planejamento de cobertura',
                 'Definição de canais e repetição',

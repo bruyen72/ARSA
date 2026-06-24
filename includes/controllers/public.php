@@ -18,33 +18,70 @@ function home_page(): void
 
 function produtos_page(): void
 {
-    $categoria = $_GET['category'] ?? 'todos';
+    // Definição das marcas com logo, descrição e padrão de busca no banco
+    $marcas = [
+        'hytera' => [
+            'label'    => 'Hytera',
+            'logo'     => '/static/img/brands/hytera.svg',
+            'search'   => 'hytera',
+            'descricao'=> 'Tecnologia DMR de alta performance para comunicação corporativa e industrial. Referência global em rádios digitais com criptografia, alta durabilidade e longa vida de bateria.',
+        ],
+        'intelbras' => [
+            'label'    => 'Intelbras',
+            'logo'     => '/static/img/brands/intelbras.svg',
+            'search'   => 'intelbras',
+            'descricao'=> 'Marca nacional com excelente custo-benefício e suporte técnico em todo o Brasil. Ideal para empresas que buscam confiabilidade com investimento acessível.',
+        ],
+        'caltta' => [
+            'label'    => 'Caltta',
+            'logo'     => '/static/img/brands/caltta.png',
+            'search'   => 'caltta',
+            'descricao'=> 'Solução PoC (Push-to-Talk over Cellular) que opera via rede celular e internet, eliminando barreiras de distância e cobertura. Perfeito para operações em área ampla.',
+        ],
+        'motorola' => [
+            'label'    => 'Motorola Solutions',
+            'logo'     => '/static/img/brands/motorola-solutions.svg',
+            'search'   => 'motorola',
+            'descricao'=> 'Líder mundial em radiocomunicação com décadas de inovação. Equipamentos robustos, confiáveis e com ecossistema completo de acessórios e suporte.',
+        ],
+    ];
+
+    $marca_key  = isset($_GET['marca']) && isset($marcas[$_GET['marca']]) ? $_GET['marca'] : null;
+    $categoria  = $_GET['category'] ?? 'todos';
     $categorias = array_merge(['todos' => 'Todos os produtos'], get_categories());
 
     if ($categoria !== 'todos' && !isset(get_categories()[$categoria])) {
         $categoria = 'todos';
     }
 
-    if ($categoria === 'todos') {
-        $produtos = db()->query('SELECT * FROM products ORDER BY category, name')->fetchAll();
-    } else {
-        $stmt = db()->prepare('SELECT * FROM products WHERE category = ? ORDER BY name');
-        $stmt->execute([$categoria]);
+    $produtos = [];
+    if ($marca_key !== null) {
+        $busca = '%' . $marcas[$marca_key]['search'] . '%';
+        if ($categoria === 'todos') {
+            $stmt = db()->prepare('SELECT * FROM products WHERE LOWER(brand) LIKE LOWER(?) ORDER BY category, name');
+            $stmt->execute([$busca]);
+        } else {
+            $stmt = db()->prepare('SELECT * FROM products WHERE LOWER(brand) LIKE LOWER(?) AND category = ? ORDER BY name');
+            $stmt->execute([$busca, $categoria]);
+        }
         $produtos = $stmt->fetchAll();
     }
 
     foreach ($produtos as &$p) {
-        $p['highlights'] = json_decode($p['highlights'] ?? '[]', true) ?: [];
-        $p['image_paths'] = json_decode($p['image_paths'] ?? '[]', true) ?: [];
+        $p['highlights']   = json_decode($p['highlights'] ?? '[]', true) ?: [];
+        $p['image_paths']  = json_decode($p['image_paths'] ?? '[]', true) ?: [];
     }
     unset($p);
 
     echo render_template('produtos.html', [
-        'title' => 'Produtos',
-        'active' => 'produtos',
-        'products' => $produtos,
-        'categories' => $categorias,
+        'title'            => 'Produtos',
+        'active'           => 'produtos',
+        'products'         => $produtos,
+        'categories'       => $categorias,
         'current_category' => $categoria,
+        'marcas'           => $marcas,
+        'current_marca'    => $marca_key,
+        'marca_info'       => $marca_key ? $marcas[$marca_key] : null,
     ]);
 }
 

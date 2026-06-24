@@ -57,14 +57,14 @@ p { text-wrap: pretty; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
+  background: rgba(255, 255, 255, 0.97);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  box-shadow: 0 1px 0 var(--line), 0 6px 24px rgba(10, 39, 64, 0.07);
   transition: background 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
   padding: 18px 0;
 }
 .site-header.scrolled {
-  background: rgba(255, 255, 255, 0.88);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
-  box-shadow: 0 1px 0 var(--line), 0 6px 24px rgba(10, 39, 64, 0.07);
   padding: 10px 0;
 }
 .header-inner {
@@ -841,6 +841,95 @@ body[data-theme="vibrante"] .site-footer {
   text-align: center;
   color: var(--ink-soft);
   padding: 60px 0;
+}
+
+/* ── Grade de marcas ────────────────────────────────────── */
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.brand-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 36px 32px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.brand-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(27, 143, 217, 0.4);
+}
+.brand-logo-wrap {
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+.brand-logo-wrap img {
+  max-height: 100%;
+  max-width: 160px;
+  object-fit: contain;
+}
+.brand-card h3 { font-size: 21px; color: var(--ink); }
+.brand-card > p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; flex: 1; }
+.brand-link { font-weight: 700; color: var(--accent); font-size: 14.5px; }
+
+/* ── Página interna de marca ────────────────────────────── */
+.brand-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+}
+.brand-breadcrumb a {
+  font-weight: 600;
+  color: var(--accent-deep);
+  transition: color 0.18s ease;
+}
+.brand-breadcrumb a:hover { color: var(--accent); }
+.brand-breadcrumb span { color: var(--ink); font-weight: 600; }
+.brand-breadcrumb span::before { content: "/"; margin-right: 12px; color: var(--line); }
+
+.brand-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: center;
+  padding: 28px 32px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 32px;
+}
+.brand-header-logo {
+  width: 150px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.brand-header-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.brand-header-text h2 { font-size: 26px; margin-bottom: 8px; }
+.brand-header-text p { color: var(--ink-soft); font-size: 15.5px; max-width: 56em; }
+
+@media (max-width: 700px) {
+  .brand-grid { grid-template-columns: 1fr; }
+  .brand-header { grid-template-columns: 1fr; }
+  .brand-header-logo { width: 120px; height: 56px; }
 }
 
 /* ── Detalhe do produto ─────────────────────────────────── */
