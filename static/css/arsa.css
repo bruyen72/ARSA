@@ -681,16 +681,7 @@ body[data-theme="profundo"] .hero .btn-ghost:hover { border-color: #4db1ec; colo
 body[data-theme="profundo"] .hero-card { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.14); }
 body[data-theme="profundo"] .hero-card .caption { color: rgba(255, 255, 255, 0.7); }
 body[data-theme="profundo"] .wave-rings i { border-color: rgba(77, 177, 236, 0.6); }
-body[data-theme="profundo"]:has(.hero, .page-hero) .site-header:not(.scrolled) .main-nav a { color: rgba(255, 255, 255, 0.8); }
-body[data-theme="profundo"]:has(.hero, .page-hero) .site-header:not(.scrolled) .main-nav a:hover,
-body[data-theme="profundo"]:has(.hero, .page-hero) .site-header:not(.scrolled) .main-nav a[aria-current="page"] { color: #fff; background: rgba(255, 255, 255, 0.12); }
-body[data-theme="profundo"]:has(.hero, .page-hero) .site-header:not(.scrolled) .nav-toggle { border-color: rgba(255,255,255,0.3); }
-body[data-theme="profundo"]:has(.hero, .page-hero) .site-header:not(.scrolled) .nav-toggle span { background: #fff; }
-/* Menu mobile aberto sempre tem fundo claro: força cor escura nos links,
-   mesmo com header transparente (tema profundo) */
-body[data-theme="profundo"]:has(.hero, .page-hero) .site-header:not(.scrolled) .main-nav.open a { color: var(--ink-soft); }
-body[data-theme="profundo"]:has(.hero, .page-hero) .site-header:not(.scrolled) .main-nav.open a:hover,
-body[data-theme="profundo"]:has(.hero, .page-hero) .site-header:not(.scrolled) .main-nav.open a[aria-current="page"] { color: var(--accent-deep); background: var(--accent-soft); }
+/* header sempre branco — links mantêm cor padrão em todos os temas/páginas */
 body[data-theme="profundo"] .page-hero {
   background:
     radial-gradient(900px 420px at 75% -10%, rgba(27, 143, 217, 0.25), transparent 60%),
