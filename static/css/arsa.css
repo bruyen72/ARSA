@@ -560,6 +560,24 @@ p { text-wrap: pretty; }
 }
 .cta-band .rings::after { inset: 100px; border-color: rgba(255, 255, 255, 0.08); }
 
+/* ── Instagram Feed section ────────────────────────────── */
+.ig-profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  transition: color 0.18s ease, gap 0.18s ease;
+}
+.ig-profile-link svg { flex-shrink: 0; }
+.ig-profile-link:hover { color: #c13584; gap: 12px; }
+.ig-embed-wrap {
+  max-width: 820px;
+  margin: 32px auto 0;
+}
+
 /* ── Footer ─────────────────────────────────────────────── */
 .site-footer {
   background: var(--navy);

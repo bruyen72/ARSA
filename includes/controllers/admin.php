@@ -541,6 +541,7 @@ function content_field_map(): array
         'social_instagram' => ['Link do Instagram', 'input'],
         'social_facebook' => ['Link do Facebook', 'input'],
         'social_linkedin' => ['Link do LinkedIn', 'input'],
+        'instagram_widget_id' => ['ID do widget Elfsight (feed do Instagram na home)', 'input'],
         'footer_copyright' => ['Texto de copyright (rodapé)', 'input'],
         'footer_location' => ['Cidade / UF (rodapé)', 'input'],
     ];
@@ -575,7 +576,7 @@ function content_sections(): array
         'contato' => [
             'label' => 'Contato',
             'descricao' => 'Telefone, endereço, redes sociais e rodapé do site.',
-            'campos' => ['contact_phone_display', 'contact_whatsapp', 'contact_email', 'contact_hours', 'contact_address_line1', 'contact_address_line2', 'social_instagram', 'social_facebook', 'social_linkedin', 'footer_copyright', 'footer_location'],
+            'campos' => ['contact_phone_display', 'contact_whatsapp', 'contact_email', 'contact_hours', 'contact_address_line1', 'contact_address_line2', 'social_instagram', 'social_facebook', 'social_linkedin', 'instagram_widget_id', 'footer_copyright', 'footer_location'],
         ],
     ];
 }

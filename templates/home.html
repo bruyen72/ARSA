@@ -184,6 +184,29 @@ include __DIR__ . '/partials/header.html';
     </div>
   </section>
 
+  <!-- INSTAGRAM FEED -->
+  <section class="section ig-section" data-screen-label="Instagram">
+    <div class="wrap">
+      <div class="section-head center rv">
+        <div class="kicker">Redes Sociais</div>
+        <h2>Últimas Novidades</h2>
+        <a class="ig-profile-link rv" href="https://www.instagram.com/arsaradiocomunicacao/" target="_blank" rel="noopener noreferrer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+          </svg>
+          Acompanhe nosso Instagram
+        </a>
+      </div>
+      <div class="ig-embed-wrap rv">
+        <!-- Widget Elfsight Instagram Feed -->
+        <script src="https://static.elfsight.com/platform/platform.js" async></script>
+        <div class="elfsight-app-<?= h(get_content('instagram_widget_id', 'CONFIGURE-NO-ADMIN')) ?>" data-elfsight-app-lazy></div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="section" style="padding-top: 32px;" data-screen-label="CTA final">
     <div class="wrap">
