@@ -571,7 +571,7 @@ p { text-wrap: pretty; }
   box-shadow: 0 4px 24px rgba(10,39,64,.10);
 }
 @media (max-width: 700px) {
-  .ig-embed-wrap iframe { height: 860px; border-radius: 8px; }
+  .ig-embed-wrap iframe { height: 580px; border-radius: 8px; }
 }
 
 /* ── Footer ─────────────────────────────────────────────── */
