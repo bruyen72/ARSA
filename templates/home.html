@@ -184,25 +184,76 @@ include __DIR__ . '/partials/header.html';
     </div>
   </section>
 
-  <!-- INSTAGRAM FEED -->
+  <!-- INSTAGRAM -->
   <section class="section ig-section" data-screen-label="Instagram">
     <div class="wrap">
       <div class="section-head center rv">
         <div class="kicker">Redes Sociais</div>
         <h2>Últimas Novidades</h2>
-        <a class="ig-profile-link rv" href="https://www.instagram.com/arsaradiocomunicacao/" target="_blank" rel="noopener noreferrer">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      </div>
+
+      <!-- Card do perfil -->
+      <a class="ig-profile-card rv" href="https://www.instagram.com/arsaradiocomunicacao/" target="_blank" rel="noopener noreferrer" aria-label="Ver perfil ARSA no Instagram">
+        <div class="ig-profile-card-inner">
+          <div class="ig-avatar-wrap">
+            <img src="<?= url_for('/static/img/logo-arsa.png') ?>" alt="ARSA" class="ig-avatar">
+          </div>
+          <div class="ig-profile-info">
+            <strong class="ig-handle">@arsaradiocomunicacao</strong>
+            <span class="ig-name">ARSA Radiocomunicação</span>
+          </div>
+          <div class="ig-brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#f09433"/>
+                  <stop offset="25%" stop-color="#e6683c"/>
+                  <stop offset="50%" stop-color="#dc2743"/>
+                  <stop offset="75%" stop-color="#cc2366"/>
+                  <stop offset="100%" stop-color="#bc1888"/>
+                </linearGradient>
+              </defs>
+              <rect x="2" y="2" width="20" height="20" rx="5.5" fill="url(#ig-grad)"/>
+              <circle cx="12" cy="12" r="4.5" stroke="#fff" stroke-width="2"/>
+              <circle cx="17.5" cy="6.5" r="1.3" fill="#fff"/>
+            </svg>
+          </div>
+        </div>
+        <span class="ig-follow-btn">Seguir no Instagram →</span>
+      </a>
+
+      <!-- Posts incorporados (embed nativo Instagram) -->
+      <?php
+        $posts = [];
+        for ($i = 1; $i <= 4; $i++) {
+          $url = get_content('instagram_post_' . $i, '');
+          if ($url !== '') $posts[] = $url;
+        }
+      ?>
+      <?php if (!empty($posts)): ?>
+      <div class="ig-posts-grid rv">
+        <?php foreach ($posts as $postUrl): ?>
+        <div class="ig-post-wrap">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="<?= h($postUrl) ?>"
+            data-instgrm-version="14"
+            style="background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,.5),0 1px 10px 0 rgba(0,0,0,.15);margin:0;max-width:100%;min-width:326px;padding:0;width:calc(100% - 2px);">
+          </blockquote>
+        </div>
+        <?php endforeach; ?>
+      </div>
+      <script async src="//www.instagram.com/embed.js"></script>
+      <?php endif; ?>
+
+      <div class="center rv" style="margin-top:32px;">
+        <a class="btn-ig-full" href="https://www.instagram.com/arsaradiocomunicacao/" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" stroke-width="2"/>
             <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/>
             <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
           </svg>
-          Acompanhe nosso Instagram
+          Ver todos os posts
         </a>
-      </div>
-      <div class="ig-embed-wrap rv">
-        <!-- Widget Elfsight Instagram Feed -->
-        <script src="https://static.elfsight.com/platform/platform.js" async></script>
-        <div class="elfsight-app-<?= h(get_content('instagram_widget_id', 'CONFIGURE-NO-ADMIN')) ?>" data-elfsight-app-lazy></div>
       </div>
     </div>
   </section>

@@ -541,7 +541,10 @@ function content_field_map(): array
         'social_instagram' => ['Link do Instagram', 'input'],
         'social_facebook' => ['Link do Facebook', 'input'],
         'social_linkedin' => ['Link do LinkedIn', 'input'],
-        'instagram_widget_id' => ['ID do widget Elfsight (feed do Instagram na home)', 'input'],
+        'instagram_post_1' => ['Post Instagram 1 — URL completa (ex: https://www.instagram.com/p/XXXXX/)', 'input'],
+        'instagram_post_2' => ['Post Instagram 2 — URL completa', 'input'],
+        'instagram_post_3' => ['Post Instagram 3 — URL completa', 'input'],
+        'instagram_post_4' => ['Post Instagram 4 — URL completa', 'input'],
         'footer_copyright' => ['Texto de copyright (rodapé)', 'input'],
         'footer_location' => ['Cidade / UF (rodapé)', 'input'],
     ];
@@ -576,7 +579,7 @@ function content_sections(): array
         'contato' => [
             'label' => 'Contato',
             'descricao' => 'Telefone, endereço, redes sociais e rodapé do site.',
-            'campos' => ['contact_phone_display', 'contact_whatsapp', 'contact_email', 'contact_hours', 'contact_address_line1', 'contact_address_line2', 'social_instagram', 'social_facebook', 'social_linkedin', 'instagram_widget_id', 'footer_copyright', 'footer_location'],
+            'campos' => ['contact_phone_display', 'contact_whatsapp', 'contact_email', 'contact_hours', 'contact_address_line1', 'contact_address_line2', 'social_instagram', 'social_facebook', 'social_linkedin', 'instagram_post_1', 'instagram_post_2', 'instagram_post_3', 'instagram_post_4', 'footer_copyright', 'footer_location'],
         ],
     ];
 }
