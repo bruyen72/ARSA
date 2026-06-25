@@ -184,6 +184,10 @@ function sync_services(PDO $pdo): void
         ['col' => 'description',
          'old' => 'Visitamos a operação, planejamos cobertura, repetição e canais, e cuidamos da regularização para a frequência operar com segurança.',
          'new' => 'Analisamos sua operação, planejamos a cobertura e cuidamos da configuração e regularização da comunicação.'],
+        // Migração de imagens PNG → WebP (performance)
+        ['col' => 'image_path', 'old' => 'static/img/services/service-rental.png',      'new' => 'static/img/services/service-rental.webp'],
+        ['col' => 'image_path', 'old' => 'static/img/services/service-maintenance.png', 'new' => 'static/img/services/service-maintenance.webp'],
+        ['col' => 'image_path', 'old' => 'static/img/services/service-consulting.png',  'new' => 'static/img/services/service-consulting.webp'],
     ];
 
     foreach ($migracoes as $m) {
@@ -270,15 +274,3 @@ function seed_if_empty(PDO $pdo): void
         $stmtS->execute([
             ':name' => $s['name'],
             ':description' => $s['description'],
-            ':features' => json_encode($s['features'], JSON_UNESCAPED_UNICODE),
-            ':image_path' => $s['image_path'],
-            ':category' => $s['category'],
-        ]);
-    }
-
-    // --- Conteúdo do site (textos editáveis) --------------------------------
-    $stmtC = $pdo->prepare('INSERT INTO site_content (chave, valor) VALUES (:chave, :valor)');
-    foreach (seed_content() as $chave => $valor) {
-        $stmtC->execute([':chave' => $chave, ':valor' => $valor]);
-    }
-}

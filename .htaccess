@@ -12,16 +12,11 @@ RewriteRule ^ - [L]
 # Caso contrário, envia para o roteador PHP.
 RewriteRule ^ index.php [L]
 
-# Bloqueia acesso direto ao banco de dados
-# (.image-slots.state.json continua acessível: é usado pelo image-slot.js
-# para mostrar as fotos de fallback no site)
-<FilesMatch "\.(db|sqlite)$">
-    Require all denied
-</FilesMatch>
-
-<IfModule !mod_authz_core.c>
-    <FilesMatch "\.(db|sqlite)$">
-        Order allow,deny
-        Deny from all
-    </FilesMatch>
-</IfModule>
+# Cache longo para arquivos estáticos (1 ano)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg        "access plus 1 year"
+    ExpiresByType image/png         "access plus 1 year"
+    ExpiresByType image/webp        "access plus 1 year"
+    ExpiresByType image/svg+xml     "access plus 1 year"
+    ExpiresByType text/css          "access plus 1 

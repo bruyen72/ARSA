@@ -19,7 +19,7 @@ function seed_services(): array
                 'Equipamentos já programados',
                 'Manutenção e troca por nossa conta nos planos mensais',
             ],
-            'image_path' => 'static/img/services/service-rental.png',
+            'image_path' => 'static/img/services/service-rental.webp',
         ],
         [
             'name' => 'Coleta, diagnóstico e reparo',
@@ -30,7 +30,7 @@ function seed_services(): array
                 'Diagnóstico e reparo em laboratório',
                 'Programação e testes antes da devolução',
             ],
-            'image_path' => 'static/img/services/service-maintenance.png',
+            'image_path' => 'static/img/services/service-maintenance.webp',
         ],
         [
             'name' => 'Rede planejada e dimensionada para máxima eficiência operacional.',
@@ -41,7 +41,7 @@ function seed_services(): array
                 'Definição de canais e repetição',
                 'Licenciamento junto à ANATEL',
             ],
-            'image_path' => 'static/img/services/service-consulting.png',
+            'image_path' => 'static/img/services/service-consulting.webp',
         ],
     ];
 }
