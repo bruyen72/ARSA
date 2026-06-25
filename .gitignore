@@ -1,0 +1,20 @@
+# Banco de dados (gerado automaticamente no servidor)
+data/local.db
+data/local.db-journal
+data/local.db?mode=ro
+data/ADMIN_CREDENCIAIS.txt
+local.db
+
+# Uploads de usuários (fotos/PDFs de produtos)
+# uploads/ é versionado para manter a estrutura, mas ignore conteúdo dinâmico
+uploads/products/
+uploads/services/
+uploads/brands/
+
+# Estado interno de slots de imagem
+.image-slots.state.json
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+*.log
